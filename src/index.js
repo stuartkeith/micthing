@@ -7,9 +7,15 @@ import App from './App';
 import middleware from './middleware';
 import reducer from './reducers';
 
+let storeMiddleware = middleware;
+
+if (process.env.NODE_ENV !== 'production') {
+  storeMiddleware = [...storeMiddleware, logger];
+}
+
 const store = createStore(
   reducer,
-  applyMiddleware(...middleware, logger)
+  applyMiddleware(...storeMiddleware)
 );
 
 ReactDOM.render(
