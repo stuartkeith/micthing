@@ -7,6 +7,8 @@ export const LAYER_SET_NOTE = 'LAYER_SET_NOTE';
 export const MICROPHONE_DISABLE = 'MICROPHONE_DISABLE';
 export const MICROPHONE_ENABLE = 'MICROPHONE_ENABLE';
 export const MICROPHONE_REQUEST = 'MICROPHONE_REQUEST';
+export const PLAYBACK_START = 'PLAYBACK_START';
+export const PLAYBACK_STOP = 'PLAYBACK_STOP';
 export const RECORDING_START = 'RECORDING_START';
 export const RECORDING_STOP = 'RECORDING_STOP';
 
@@ -73,6 +75,18 @@ export function microphoneEnable(mediaStream) {
 export function microphoneRequest() {
   return {
     type: MICROPHONE_REQUEST
+  };
+}
+
+export function playbackStart() {
+  return {
+    type: PLAYBACK_START
+  };
+}
+
+export function playbackStop() {
+  return {
+    type: PLAYBACK_STOP
   };
 }
 

@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { CAPTURING_START, CAPTURING_STOP, LAYER_ADD, LAYER_REMOVE, LAYER_SET_MUTED, LAYER_SET_NOTE, MICROPHONE_DISABLE, MICROPHONE_ENABLE, MICROPHONE_REQUEST, RECORDING_START, RECORDING_STOP } from '../actions';
+import { CAPTURING_START, CAPTURING_STOP, LAYER_ADD, LAYER_REMOVE, LAYER_SET_MUTED, LAYER_SET_NOTE, MICROPHONE_DISABLE, MICROPHONE_ENABLE, MICROPHONE_REQUEST, PLAYBACK_START, PLAYBACK_STOP, RECORDING_START, RECORDING_STOP } from '../actions';
 import { MICROPHONE_STATE } from '../constants';
 
 function isCapturing(state = false, action) {
@@ -8,6 +8,17 @@ function isCapturing(state = false, action) {
       return false;
     case CAPTURING_START:
       return true;
+    default:
+      return state;
+  }
+}
+
+function isPlaying(state = false, action) {
+  switch (action.type) {
+    case PLAYBACK_START:
+      return true;
+    case PLAYBACK_STOP:
+      return false;
     default:
       return state;
   }
@@ -114,6 +125,7 @@ function recordingThresholdSamples(state = 20000, action) {
 
 export default combineReducers({
   isCapturing,
+  isPlaying,
   isRecording,
   layers,
   microphoneState,

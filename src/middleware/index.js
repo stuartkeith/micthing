@@ -1,5 +1,5 @@
-import { LAYER_ADD, LAYER_REMOVE } from '../actions';
-import { capturingStart, capturingStop, layerAdd, microphoneDisable, microphoneEnable, microphoneRequest } from '../actions';
+import { LAYER_ADD, LAYER_REMOVE, PLAYBACK_START, PLAYBACK_STOP } from '../actions';
+import { capturingStart, capturingStop, layerAdd, microphoneDisable, microphoneEnable, microphoneRequest, playbackStart } from '../actions';
 import { audioContext, playBuffer, Scheduler } from '../webaudio';
 
 const BUFFER_SIZE = 2048;
@@ -58,8 +58,6 @@ function playback(store) {
     index++;
   };
 
-  scheduler.start();
-
   return function (next) {
     return function (action) {
       switch (action.type) {
@@ -68,6 +66,12 @@ function playback(store) {
           break;
         case LAYER_REMOVE:
           delete buffersByLayerId[action.layerId];
+          break;
+        case PLAYBACK_START:
+          scheduler.start();
+          break;
+        case PLAYBACK_STOP:
+          scheduler.stop();
           break;
         default:
       }
@@ -136,6 +140,10 @@ function recorder(store) {
 
             if (state.layers.length < 5) {
               store.dispatch(layerAdd(state.nextLayerId, buffer));
+
+              if (state.layers.length === 0) {
+                store.dispatch(playbackStart());
+              }
             }
           }
 

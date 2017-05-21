@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { layerRemove, layerSetMuted, layerSetNote, recordingStart, recordingStop } from './actions';
+import { layerRemove, layerSetMuted, layerSetNote, playbackStart, playbackStop, recordingStart, recordingStop } from './actions';
 import { MICROPHONE_STATE } from './constants';
 
 function Button({ children, onClick }) {
@@ -47,15 +47,25 @@ class App extends React.Component {
   }
 
   renderRecorder() {
-    const { isCapturing, isRecording, layers, onLayerRemove, onSetLayerIsMuted, onSetLayerNote } = this.props;
+    const { isCapturing, isPlaying, isRecording, layers, onLayerRemove, onSetLayerIsMuted, onSetLayerNote } = this.props;
 
     return (
       <div className="ma6">
-        {isRecording ?
-          <Button onClick={this.props.onStopRecording}>Stop</Button>
-          :
-          <Button onClick={this.props.onStartRecording}>Record</Button>
-        }
+        <div className="flex mb3">
+          {isRecording ?
+            <Button onClick={this.props.onStopRecording}>Stop</Button>
+            :
+            <Button onClick={this.props.onStartRecording}>Record</Button>
+          }
+          {layers.length ?
+            isPlaying ?
+              <Button onClick={this.props.onStopPlaying}>Stop</Button>
+              :
+              <Button onClick={this.props.onStartPlaying}>Play</Button>
+            :
+            null
+          }
+        </div>
         {isCapturing ? <p className="ma0 h2">...</p> : null}
         {layers.map((layer) => {
           return (
@@ -96,6 +106,12 @@ function mapDispatchToProps(dispatch) {
     },
     onSetLayerNote: function (layerId, index, value) {
       dispatch(layerSetNote(layerId, index, !value));
+    },
+    onStartPlaying: function () {
+      dispatch(playbackStart());
+    },
+    onStopPlaying: function () {
+      dispatch(playbackStop());
     },
     onStartRecording: function () {
       dispatch(recordingStart());
