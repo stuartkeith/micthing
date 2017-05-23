@@ -54,21 +54,26 @@ class App extends React.Component {
   }
 
   renderRecorder() {
-    const { isCapturing, isPlaying, isRecording, layers, onLayerRemove, onSetLayerIsMuted, onSetLayerNote } = this.props;
+    const { isCapturing, isPlaying, isRecording, layers } = this.props;
+    const { onLayerRemove, onSetLayerIsMuted, onSetLayerNote, onStartPlaying, onStopPlaying, onStartRecording, onStopRecording } = this.props;
 
     return (
       <div className="ma6">
         <div className="flex mb3">
-          {isRecording ?
-            <Button onClick={this.props.onStopRecording}>Stop</Button>
-            :
-            <Button onClick={this.props.onStartRecording}>Record</Button>
-          }
+          <Button
+            hasMargin
+            isDown={isRecording}
+            onClick={isRecording ? onStopRecording : onStartRecording}
+          >
+            Record
+          </Button>
           {layers.length ?
-            isPlaying ?
-              <Button onClick={this.props.onStopPlaying}>Stop</Button>
-              :
-              <Button onClick={this.props.onStartPlaying}>Play</Button>
+            <Button
+              isDown={isPlaying}
+              onClick={isPlaying ? onStopPlaying : onStartPlaying}
+            >
+              Play
+            </Button>
             :
             null
           }
@@ -76,10 +81,19 @@ class App extends React.Component {
         {isCapturing ? <p className="ma0 h2">...</p> : null}
         {layers.map((layer) => {
           return (
-            <div className="flex" key={layer.id}>
-              <Button onClick={() => onLayerRemove(layer.id)}>Remove</Button>
-              <Button onClick={() => onSetLayerIsMuted(layer.id, layer.isMuted)}>
-                {layer.isMuted ? 'Unmute' : 'Mute'}
+            <div className="flex mb3" key={layer.id}>
+              <Button
+                hasMargin
+                onClick={() => onLayerRemove(layer.id)}
+              >
+                Remove
+              </Button>
+              <Button
+                hasMargin
+                isDown={layer.isMuted}
+                onClick={() => onSetLayerIsMuted(layer.id, layer.isMuted)}
+              >
+                Mute
               </Button>
               <div className="flex">
                 {layer.notes.map((note, index) => (
