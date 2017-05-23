@@ -1,0 +1,9 @@
+.button-border-top {
+  border-top-style: solid;
+  border-top-width: 2px;
+}
+
+.button-border-bottom {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+}
