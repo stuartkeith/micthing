@@ -65,7 +65,7 @@ class App extends React.Component {
         </div>
         {isCapturing ? <p className="ma0 h2">...</p> : null}
         {layers.map((layer) => (
-          <Layer layer={layer} />
+          <Layer key={layer.id} layer={layer} />
         ))}
       </div>
     );
