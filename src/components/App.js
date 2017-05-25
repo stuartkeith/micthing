@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import React from 'react';
 import { connect } from 'react-redux';
-import { layerRemove, layerSetMuted, layerSetNote, playbackStart, playbackStop, recordingStart, recordingStop } from './actions';
-import { MICROPHONE_STATE } from './constants';
+import { layerRemove, layerSetMuted, layerSetNote, playbackStart, playbackStop, recordingStart, recordingStop } from '../actions';
+import { MICROPHONE_STATE } from '../constants';
 import './App.css';
 
 function Button({ children, isDown, hasMargin, onClick }) {
