@@ -40,7 +40,7 @@ class App extends React.Component {
 
   renderRecorder() {
     const { isCapturing, isPlaying, isRecording, layers } = this.props;
-    const { onStartPlaying, onStopPlaying, onStartRecording, onStopRecording } = this.props;
+    const { playbackStart, playbackStop, recordingStart, recordingStop } = this.props;
 
     return (
       <div className="ma6">
@@ -48,14 +48,14 @@ class App extends React.Component {
           <Button
             hasMargin
             isDown={isRecording}
-            onClick={isRecording ? onStopRecording : onStartRecording}
+            onClick={isRecording ? recordingStop : recordingStart}
           >
             Record
           </Button>
           {layers.length ?
             <Button
               isDown={isPlaying}
-              onClick={isPlaying ? onStopPlaying : onStartPlaying}
+              onClick={isPlaying ? playbackStop : playbackStart}
             >
               Play
             </Button>
@@ -73,27 +73,18 @@ class App extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return state;
-}
-
-function mapDispatchToProps(dispatch) {
   return {
-    onStartPlaying: function () {
-      dispatch(playbackStart());
-    },
-    onStopPlaying: function () {
-      dispatch(playbackStop());
-    },
-    onStartRecording: function () {
-      dispatch(recordingStart());
-    },
-    onStopRecording: function () {
-      dispatch(recordingStop());
-    }
+    isCapturing: state.isCapturing,
+    isPlaying: state.isPlaying,
+    isRecording: state.isRecording,
+    layers: state.layers,
+    microphoneState: state.microphoneState
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(App);
+export default connect(mapStateToProps, {
+  playbackStart,
+  playbackStop,
+  recordingStart,
+  recordingStop
+})(App);
