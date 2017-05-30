@@ -101,15 +101,27 @@ export default function recorder(store) {
   const recorder = new Recorder(recordBufferLength);
 
   let audioInput = null;
+  let currentMaxSample = 0;
+  let previousTime = null;
 
   const onAnimationFrame = function (time) {
     requestAnimationFrame(onAnimationFrame);
 
+    previousTime = previousTime || time;
+
+    const elapsedTime = (time - previousTime) / 1000;
     const maxSample = Math.min(1, recorder.maxSample);
 
+    if (maxSample >= currentMaxSample) {
+      currentMaxSample = maxSample;
+    } else {
+      currentMaxSample *= Math.pow(0.1, elapsedTime);
+    }
+
+    previousTime = time;
     recorder.maxSample = 0;
 
-    maxSampleMessageBus.update(maxSample);
+    maxSampleMessageBus.update(currentMaxSample);
   };
 
   audioRecorder.onaudioprocess = function (event) {
