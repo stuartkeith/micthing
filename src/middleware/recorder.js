@@ -104,9 +104,11 @@ export default function recorder(store) {
   const onAnimationFrame = function (time) {
     requestAnimationFrame(onAnimationFrame);
 
-    maxSampleMessageBus.update(recorder.maxSample);
+    const maxSample = Math.min(1, recorder.maxSample);
 
     recorder.maxSample = 0;
+
+    maxSampleMessageBus.update(maxSample);
   };
 
   audioRecorder.onaudioprocess = function (event) {
