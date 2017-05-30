@@ -1,5 +1,6 @@
 import { audioContext } from '../webaudio';
 import { capturingStart, capturingStop, layerAdd, playbackStart } from '../actions';
+import MessageBus from '../utils/MessageBus';
 
 const BUFFER_SIZE = 2048;
 const FADE_SAMPLES = 400;
@@ -34,6 +35,8 @@ class Recorder {
     this.recordBufferL = new Float32Array(recordBufferLength);
     this.recordBufferR = new Float32Array(recordBufferLength);
 
+    this.maxSample = 0;
+
     this.reset();
     this.setInputBuffer([], []);
   }
@@ -66,6 +69,8 @@ class Recorder {
 
       const absSampleL = Math.abs(sampleL);
       const absSampleR = Math.abs(sampleR);
+
+      this.maxSample = Math.max(this.maxSample, absSampleL, absSampleR);
 
       if (isEnabled && ((absSampleL >= recordingThreshold) || (absSampleR >= recordingThreshold))) {
         this.consecutiveSamplesUnderThreshold = 0;
@@ -103,6 +108,17 @@ export default function recorder(store) {
       const audioRecorder = audioContext.createScriptProcessor(BUFFER_SIZE, 2, 2);
       const recordBufferLength = Math.floor(MAX_RECORD_SECONDS * audioContext.sampleRate);
       const recorder = new Recorder(recordBufferLength);
+      const maxSampleMessageBus = new MessageBus();
+
+      const onAnimationFrame = function (time) {
+        requestAnimationFrame(onAnimationFrame);
+
+        maxSampleMessageBus.update(recorder.maxSample);
+
+        recorder.maxSample = 0;
+      };
+
+      requestAnimationFrame(onAnimationFrame);
 
       audioRecorder.onaudioprocess = function (event) {
         let state = store.getState();
