@@ -94,65 +94,63 @@ class Recorder {
 }
 
 export default function recorder(store) {
-  let hasInitialised = false;
+  const audioRecorder = audioContext.createScriptProcessor(BUFFER_SIZE, 2, 2);
+  const maxSampleMessageBus = new MessageBus();
+  const recordBufferLength = Math.floor(MAX_RECORD_SECONDS * audioContext.sampleRate);
+  const recorder = new Recorder(recordBufferLength);
+
+  let audioInput = null;
+
+  const onAnimationFrame = function (time) {
+    requestAnimationFrame(onAnimationFrame);
+
+    maxSampleMessageBus.update(recorder.maxSample);
+
+    recorder.maxSample = 0;
+  };
+
+  audioRecorder.onaudioprocess = function (event) {
+    let state = store.getState();
+
+    const inputBufferL = event.inputBuffer.getChannelData(0);
+    const inputBufferR = event.inputBuffer.getChannelData(1);
+
+    recorder.setInputBuffer(inputBufferL, inputBufferR);
+
+    while (recorder.update(state.isRecording, state.recordingThreshold, state.recordingThresholdSamples)) {
+      const buffer = createBuffer(recorder.recordBufferL, recorder.recordBufferR, recorder.recordBufferIndex);
+
+      recorder.reset();
+
+      if (state.layers.length < 5) {
+        store.dispatch(layerAdd(state.nextLayerId, buffer));
+
+        if (state.layers.length === 0) {
+          store.dispatch(playbackStart());
+        }
+      }
+
+      state = store.getState();
+    }
+
+    if (!state.isCapturing && recorder.isRecording) {
+      store.dispatch(capturingStart());
+    } else if (state.isCapturing && !recorder.isRecording) {
+      store.dispatch(capturingStop());
+    }
+  };
+
+  audioRecorder.connect(audioContext.destination);
 
   return function (next) {
     return function (action) {
-      if (hasInitialised || !action.mediaStream) {
-        return next(action);
-      }
+      if (action.mediaStream) {
+        audioInput = audioContext.createMediaStreamSource(action.mediaStream);
 
-      hasInitialised = true;
+        audioInput.connect(audioRecorder);
 
-      const audioInput = audioContext.createMediaStreamSource(action.mediaStream);
-      const audioRecorder = audioContext.createScriptProcessor(BUFFER_SIZE, 2, 2);
-      const recordBufferLength = Math.floor(MAX_RECORD_SECONDS * audioContext.sampleRate);
-      const recorder = new Recorder(recordBufferLength);
-      const maxSampleMessageBus = new MessageBus();
-
-      const onAnimationFrame = function (time) {
         requestAnimationFrame(onAnimationFrame);
-
-        maxSampleMessageBus.update(recorder.maxSample);
-
-        recorder.maxSample = 0;
-      };
-
-      requestAnimationFrame(onAnimationFrame);
-
-      audioRecorder.onaudioprocess = function (event) {
-        let state = store.getState();
-
-        const inputBufferL = event.inputBuffer.getChannelData(0);
-        const inputBufferR = event.inputBuffer.getChannelData(1);
-
-        recorder.setInputBuffer(inputBufferL, inputBufferR);
-
-        while (recorder.update(state.isRecording, state.recordingThreshold, state.recordingThresholdSamples)) {
-          const buffer = createBuffer(recorder.recordBufferL, recorder.recordBufferR, recorder.recordBufferIndex);
-
-          recorder.reset();
-
-          if (state.layers.length < 5) {
-            store.dispatch(layerAdd(state.nextLayerId, buffer));
-
-            if (state.layers.length === 0) {
-              store.dispatch(playbackStart());
-            }
-          }
-
-          state = store.getState();
-        }
-
-        if (!state.isCapturing && recorder.isRecording) {
-          store.dispatch(capturingStart());
-        } else if (state.isCapturing && !recorder.isRecording) {
-          store.dispatch(capturingStop());
-        }
-      };
-
-      audioInput.connect(audioRecorder);
-      audioRecorder.connect(audioContext.destination);
+      }
 
       return next(action);
     };
