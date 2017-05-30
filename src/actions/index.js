@@ -11,6 +11,8 @@ export const PLAYBACK_LISTENER_ADD = 'PLAYBACK_LISTENER_ADD';
 export const PLAYBACK_LISTENER_REMOVE = 'PLAYBACK_LISTENER_REMOVE';
 export const PLAYBACK_START = 'PLAYBACK_START';
 export const PLAYBACK_STOP = 'PLAYBACK_STOP';
+export const RECORDING_LISTENER_ADD = 'RECORDING_LISTENER_ADD';
+export const RECORDING_LISTENER_REMOVE = 'RECORDING_LISTENER_REMOVE';
 export const RECORDING_START = 'RECORDING_START';
 export const RECORDING_STOP = 'RECORDING_STOP';
 
@@ -103,6 +105,20 @@ export function playbackStart() {
 export function playbackStop() {
   return {
     type: PLAYBACK_STOP
+  };
+}
+
+export function recordingListenerAdd(callback) {
+  return {
+    type: RECORDING_LISTENER_ADD,
+    callback
+  };
+}
+
+export function recordingListenerRemove(callback) {
+  return {
+    type: RECORDING_LISTENER_REMOVE,
+    callback
   };
 }
 

@@ -4,6 +4,7 @@ import { playbackStart, playbackStop, recordingStart, recordingStop } from '../a
 import { MICROPHONE_STATE } from '../constants';
 import Button from './Button';
 import Layer from './Layer';
+import VolumeMeter from './VolumeMeter';
 import './App.css';
 
 class App extends React.Component {
@@ -44,6 +45,7 @@ class App extends React.Component {
 
     return (
       <div className="ma6">
+        <VolumeMeter />
         <div className="flex mb3">
           <Button
             hasMargin

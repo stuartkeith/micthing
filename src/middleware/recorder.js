@@ -1,4 +1,5 @@
 import { audioContext } from '../webaudio';
+import { RECORDING_LISTENER_ADD, RECORDING_LISTENER_REMOVE } from '../actions';
 import { capturingStart, capturingStop, layerAdd, playbackStart } from '../actions';
 import MessageBus from '../utils/MessageBus';
 
@@ -152,6 +153,16 @@ export default function recorder(store) {
         audioInput.connect(audioRecorder);
 
         requestAnimationFrame(onAnimationFrame);
+      }
+
+      switch (action.type) {
+        case RECORDING_LISTENER_ADD:
+          maxSampleMessageBus.addListener(action.callback);
+          break;
+        case RECORDING_LISTENER_REMOVE:
+          maxSampleMessageBus.removeListener(action.callback);
+          break;
+        default:
       }
 
       return next(action);
