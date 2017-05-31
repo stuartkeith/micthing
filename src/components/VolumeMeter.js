@@ -11,11 +11,11 @@ class VolumeMeter extends React.Component {
   }
 
   componentDidMount() {
-    this.props.dispatch(recordingListenerAdd(this.audioInputListener));
+    this.props.recordingListenerAdd(this.audioInputListener);
   }
 
   componentWillUnmount() {
-    this.props.dispatch(recordingListenerRemove(this.audioInputListener));
+    this.props.recordingListenerRemove(this.audioInputListener);
   }
 
   shouldComponentUpdate() {
@@ -40,4 +40,7 @@ class VolumeMeter extends React.Component {
   }
 }
 
-export default connect()(VolumeMeter);
+export default connect(null, {
+  recordingListenerAdd,
+  recordingListenerRemove
+})(VolumeMeter);
