@@ -14,7 +14,7 @@ class VolumeMeter extends React.Component {
     this.props.dispatch(recordingListenerAdd(this.audioInputListener));
   }
 
-  componentDidUnmount() {
+  componentWillUnmount() {
     this.props.dispatch(recordingListenerRemove(this.audioInputListener));
   }
 
