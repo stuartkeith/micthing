@@ -19,7 +19,7 @@ class MessageBus {
 
   update() {
     for (let i = this.listeners.length - 1; i >= 0; i--) {
-      this.listeners[i](...arguments);
+      this.listeners[i].apply(null, arguments);
     }
   }
 }
