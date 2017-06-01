@@ -15,6 +15,7 @@ export const RECORDING_LISTENER_ADD = 'RECORDING_LISTENER_ADD';
 export const RECORDING_LISTENER_REMOVE = 'RECORDING_LISTENER_REMOVE';
 export const RECORDING_START = 'RECORDING_START';
 export const RECORDING_STOP = 'RECORDING_STOP';
+export const RECORDING_THRESHOLD_SET = 'RECORDING_THRESHOLD_SET';
 
 export function capturingStart() {
   return {
@@ -131,5 +132,12 @@ export function recordingStart() {
 export function recordingStop() {
   return {
     type: RECORDING_STOP
+  };
+}
+
+export function recordingThresholdSet(value) {
+  return {
+    type: RECORDING_THRESHOLD_SET,
+    value
   };
 }
