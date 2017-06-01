@@ -45,7 +45,9 @@ class App extends React.Component {
 
     return (
       <div className="ma6">
-        <VolumeMeter />
+        <div className="mb3">
+          <VolumeMeter />
+        </div>
         <div className="flex mb3">
           <Button
             hasMargin
