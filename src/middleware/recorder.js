@@ -51,13 +51,13 @@ class Recorder {
     this.inputBufferIndex = 0;
   }
 
-  update(isEnabled, recordingThreshold, recordingThresholdSamples) {
+  update(isEnabled, recordingThreshold, recordingThresholdTimeoutSamples) {
     while (this.inputBufferIndex < this.inputBufferL.length) {
       if (this.recordBufferIndex === this.recordBufferL.length) {
         return true;
       }
 
-      if (this.isRecording && (this.consecutiveSamplesUnderThreshold >= recordingThresholdSamples)) {
+      if (this.isRecording && (this.consecutiveSamplesUnderThreshold >= recordingThresholdTimeoutSamples)) {
         return true;
       }
 
@@ -130,7 +130,9 @@ export default function recorder(store) {
 
     recorder.setInputBuffer(inputBufferL, inputBufferR);
 
-    while (recorder.update(state.isRecording, state.recordingThreshold, state.recordingThresholdSamples)) {
+    const recordingThresholdTimeoutSamples = state.recordingThresholdTimeoutSeconds * audioContext.sampleRate;
+
+    while (recorder.update(state.isRecording, state.recordingThreshold, recordingThresholdTimeoutSamples)) {
       const buffer = createBuffer(recorder.recordBufferL, recorder.recordBufferR, recorder.recordBufferIndex);
 
       recorder.reset();

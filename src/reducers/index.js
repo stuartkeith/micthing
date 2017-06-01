@@ -118,7 +118,7 @@ function recordingThreshold(state = 0.1, action) {
   }
 }
 
-function recordingThresholdSamples(state = 20000, action) {
+function recordingThresholdTimeoutSeconds(state = 0.5, action) {
   switch (action.type) {
     default:
       return state;
@@ -133,5 +133,5 @@ export default combineReducers({
   microphoneState,
   nextLayerId,
   recordingThreshold,
-  recordingThresholdSamples
+  recordingThresholdTimeoutSeconds
 });
