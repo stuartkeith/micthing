@@ -130,17 +130,17 @@ export default function recorder(store) {
 
     recorder.setInputBuffer(inputBufferL, inputBufferR);
 
-    const recordingThresholdTimeoutSamples = state.recordingThresholdTimeoutSeconds * audioContext.sampleRate;
+    const recordingThresholdTimeoutSamples = state.recorder.thresholdTimeoutSeconds * audioContext.sampleRate;
 
-    while (recorder.update(state.isRecording, state.recordingThreshold, recordingThresholdTimeoutSamples)) {
+    while (recorder.update(state.recorder.isRecording, state.recorder.threshold, recordingThresholdTimeoutSamples)) {
       const buffer = createBuffer(recorder.recordBufferL, recorder.recordBufferR, recorder.recordBufferIndex);
 
       recorder.reset();
 
-      if (state.layers.length < 5) {
-        store.dispatch(layerAdd(state.nextLayerId, buffer));
+      if (state.layers.list.length < 5) {
+        store.dispatch(layerAdd(state.layers.nextId, buffer));
 
-        if (state.layers.length === 0) {
+        if (state.layers.list.length === 0) {
           store.dispatch(playbackStart());
         }
       }
@@ -148,9 +148,9 @@ export default function recorder(store) {
       state = store.getState();
     }
 
-    if (!state.isCapturing && recorder.isRecording) {
+    if (!state.recorder.isCapturing && recorder.isRecording) {
       store.dispatch(capturingStart());
-    } else if (state.isCapturing && !recorder.isRecording) {
+    } else if (state.recorder.isCapturing && !recorder.isRecording) {
       store.dispatch(capturingStop());
     }
   };

@@ -78,11 +78,11 @@ class App extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    isCapturing: state.isCapturing,
-    isPlaying: state.isPlaying,
-    isRecording: state.isRecording,
-    layers: state.layers,
-    microphoneState: state.microphoneState
+    isCapturing: state.recorder.isCapturing,
+    isPlaying: state.playback.isPlaying,
+    isRecording: state.recorder.isRecording,
+    layers: state.layers.list,
+    microphoneState: state.microphone.state
   };
 }
 

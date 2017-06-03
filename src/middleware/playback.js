@@ -18,7 +18,7 @@ export default function playback(store) {
 
     visualScheduler.push(index, beatTime);
 
-    state.layers.forEach(function (layer) {
+    state.layers.list.forEach(function (layer) {
       if (layer.isMuted) {
         return;
       }

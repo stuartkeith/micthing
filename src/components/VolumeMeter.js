@@ -60,7 +60,7 @@ class VolumeMeter extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    recordingThreshold: state.recordingThreshold
+    recordingThreshold: state.recorder.threshold
   };
 }
 
