@@ -61,6 +61,8 @@ export default function playback(store) {
           indexMessageBus.removeListener(action.callback);
           break;
         case PLAYBACK_START:
+          nextIndex = 0;
+
           scheduler.start();
           break;
         case PLAYBACK_STOP:
