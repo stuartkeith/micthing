@@ -50,7 +50,7 @@ class VolumeMeter extends React.Component {
     };
 
     return (
-      <div className="h2 bg-black overflow-hidden relative" onClick={this.onClick}>
+      <div className="h2 bg-black overflow-hidden relative pointer" onClick={this.onClick}>
         <div ref={this.setElement} className="absolute absolute--fill bg-white transform-origin-left" />
         <div className="absolute absolute--fill transform-origin-left bl bw1 b--gold" style={arrowStyle} />
       </div>
