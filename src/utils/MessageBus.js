@@ -17,9 +17,9 @@ class MessageBus {
     this.listeners.splice(index, 1);
   }
 
-  update() {
+  update(value) {
     for (let i = this.listeners.length - 1; i >= 0; i--) {
-      this.listeners[i].apply(null, arguments);
+      this.listeners[i](value);
     }
   }
 }
