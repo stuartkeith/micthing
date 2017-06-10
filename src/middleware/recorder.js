@@ -156,14 +156,13 @@ export default function recorder(store) {
     }
   };
 
-  audioRecorder.connect(audioContext.destination);
-
   return function (next) {
     return function (action) {
       if (action.mediaStream) {
         audioInput = audioContext.createMediaStreamSource(action.mediaStream);
 
         audioInput.connect(audioRecorder);
+        audioRecorder.connect(audioContext.destination);
 
         requestAnimationFrame(onAnimationFrame);
       }
