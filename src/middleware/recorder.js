@@ -22,8 +22,10 @@ function createBuffer(dataL, dataR, length) {
     dataR[length - i - 1] *= volume;
   }
 
-  buffer.copyToChannel(dataL, 0);
-  buffer.copyToChannel(dataR, 1);
+  // Firefox will throw an error if the arrays are longer than the buffer,
+  // so .subarray is necessary
+  buffer.copyToChannel(dataL.subarray(0, length), 0);
+  buffer.copyToChannel(dataR.subarray(0, length), 1);
 
   return buffer;
 }
