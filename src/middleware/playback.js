@@ -13,6 +13,7 @@ export default function playback(store) {
 
   scheduler.callback = function (beatTime, beatLength) {
     const state = store.getState();
+    const swing = nextIndex % 2 ? state.playback.swing : 0;
 
     index = nextIndex;
 
@@ -32,7 +33,7 @@ export default function playback(store) {
       const buffer = buffersByLayerId[layer.id];
 
       playBuffer(audioContext.destination, buffer, {
-        delay: beatTime,
+        delay: beatTime + (beatLength * swing),
         volume
       });
     });
