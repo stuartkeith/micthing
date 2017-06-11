@@ -11,9 +11,10 @@ const MAX_RECORD_SECONDS = 4;
 function createBuffer(dataL, dataR, length) {
   // note that this mutates the dataL and dataR arrays.
   const buffer = audioContext.createBuffer(2, length, audioContext.sampleRate);
+  const fadeSamples = Math.min(FADE_SAMPLES, Math.floor(length / 2));
 
-  for (let i = 0; i < FADE_SAMPLES; i++) {
-    const volume = i / FADE_SAMPLES;
+  for (let i = 0; i < fadeSamples; i++) {
+    const volume = i / fadeSamples;
 
     dataL[i] *= volume;
     dataR[i] *= volume;
