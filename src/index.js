@@ -3,15 +3,20 @@ import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
 import logger from 'redux-logger';
 import { Provider } from 'react-redux';
-import { microphoneDisable, microphoneEnable, microphoneRequest } from './actions';
+import { microphoneDisable, microphoneEnable, microphoneRequest, notSupported } from './actions';
 import App from './components/App';
 import middleware from './middleware';
 import reducer from './reducers';
+import { allRequirementsAreSupported, requirements } from './requirements';
 
-let storeMiddleware = middleware;
+const storeMiddleware = [];
 
 if (process.env.NODE_ENV !== 'production') {
-  storeMiddleware = [...storeMiddleware, logger];
+  storeMiddleware.push(logger);
+}
+
+if (allRequirementsAreSupported) {
+  storeMiddleware.push(...middleware);
 }
 
 const store = createStore(
@@ -19,23 +24,27 @@ const store = createStore(
   applyMiddleware(...storeMiddleware)
 );
 
-// if user has already granted permission,
-// there will still be a delay before getUserMedia resolves.
-// so wait before dispatching the action
-const timeoutId = setTimeout(function () {
-  store.dispatch(microphoneRequest());
-}, 500);
+if (!allRequirementsAreSupported) {
+  store.dispatch(notSupported(requirements));
+} else {
+  // if user has already granted permission,
+  // there will still be a delay before getUserMedia resolves.
+  // so wait before dispatching the action
+  const timeoutId = setTimeout(function () {
+    store.dispatch(microphoneRequest());
+  }, 500);
 
-navigator.mediaDevices.getUserMedia({ audio: true })
-  .then(function (mediaStream) {
-    clearTimeout(timeoutId);
+  navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(function (mediaStream) {
+      clearTimeout(timeoutId);
 
-    store.dispatch(microphoneEnable(mediaStream));
-  }, function () {
-    clearTimeout(timeoutId);
+      store.dispatch(microphoneEnable(mediaStream));
+    }, function () {
+      clearTimeout(timeoutId);
 
-    store.dispatch(microphoneDisable());
-  });
+      store.dispatch(microphoneDisable());
+    });
+}
 
 ReactDOM.render(
   <Provider store={store}>

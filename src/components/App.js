@@ -1,15 +1,56 @@
+import classNames from 'classnames';
 import React from 'react';
 import { connect } from 'react-redux';
 import { playbackStart, playbackStop, recordingStart, recordingStop } from '../actions';
 import { MICROPHONE_STATE } from '../constants';
 import Button from './Button';
+import IconCheck from './IconCheck';
+import IconWarning from './IconWarning';
 import Layer from './Layer';
 import VolumeMeter from './VolumeMeter';
 import './App.css';
 
 class App extends React.Component {
   render() {
-    const { microphoneState } = this.props;
+    const { isSupported, microphoneState, supportRequirements } = this.props;
+
+    if (!isSupported) {
+      return (
+        <div className="ma6">
+          <h1 className="f2 lh-title">Sorry...</h1>
+          <p className="f4 lh-copy mb4">
+            Your browser doesn't support all the features we need.
+          </p>
+          {supportRequirements.map((requirement, index) => (
+            <div
+              key={index}
+              className={classNames(
+                'mb4',
+                requirement.isSupported ? 'o-60' : null
+              )}
+            >
+              <h2 className="lh-title">
+                <span className="dib w2 h2 v-mid mr3">
+                  {requirement.isSupported ?
+                    <IconCheck />
+                    :
+                    <IconWarning />
+                  }
+                </span>
+                <span className="v-mid">
+                  {requirement.title} is {!requirement.isSupported ? ' not ' : null} supported
+                </span>
+              </h2>
+              <p>
+                {requirement.description}
+                {' '}
+                <a className="color-inherit" target="_blank" rel="noopener noreferrer" href={requirement.link}>Find out more</a>.
+              </p>
+            </div>
+          ))}
+        </div>
+      );
+    }
 
     switch (microphoneState) {
       case MICROPHONE_STATE.DISABLED:
@@ -17,7 +58,7 @@ class App extends React.Component {
           <div className="ma6">
             <h1 className="f2 lh-title">Sorry...</h1>
             <p className="f4 lh-copy">
-              I can't access your microphone.
+              We can't access your microphone.
             </p>
           </div>
         );
@@ -26,7 +67,7 @@ class App extends React.Component {
           <div className="ma6">
             <h1 className="f2 lh-title">Hi.</h1>
             <p className="f4 lh-copy">
-              Please allow this site to use your microphone.
+              Please allow us to use your microphone.
             </p>
             <p className="f5 lh-copy">(look up)</p>
           </div>
@@ -81,8 +122,10 @@ function mapStateToProps(state) {
     isCapturing: state.recorder.isCapturing,
     isPlaying: state.playback.isPlaying,
     isRecording: state.recorder.isRecording,
+    isSupported: state.support.isSupported,
     layers: state.layers.list,
-    microphoneState: state.microphone.state
+    microphoneState: state.microphone.state,
+    supportRequirements: state.support.requirements
   };
 }
 
