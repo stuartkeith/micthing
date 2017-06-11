@@ -1,7 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { playbackListenerAdd, playbackListenerRemove, layerRemove, layerSetMuted, layerSetNote } from '../actions';
+import { playbackListenerAdd, playbackListenerRemove, layerRemove, layerIncrementNote, layerSetMuted } from '../actions';
 import Button from './Button';
+
+function getOpacity(value) {
+  const minimum = 0.2;
+
+  return minimum + ((1 - minimum) * value);
+}
 
 class Layer extends React.Component {
   constructor(props) {
@@ -33,7 +39,7 @@ class Layer extends React.Component {
 
   render() {
     const { layer } = this.props;
-    const { layerRemove, layerSetMuted, layerSetNote } = this.props;
+    const { layerRemove, layerSetMuted, layerIncrementNote } = this.props;
 
     return (
       <div className="flex mb3" key={layer.id}>
@@ -55,8 +61,8 @@ class Layer extends React.Component {
             <div
               key={index}
               className="w2 h2 bg-white light-gray pointer ba"
-              style={{opacity: note ? 1 : 0.2}}
-              onClick={() => layerSetNote(layer.id, index, !note)}
+              style={{opacity: getOpacity(note)}}
+              onClick={() => layerIncrementNote(layer.id, index, note)}
             />
           ))}
           <div
@@ -73,6 +79,6 @@ export default connect(null, {
   playbackListenerAdd,
   playbackListenerRemove,
   layerRemove,
-  layerSetMuted,
-  layerSetNote
+  layerIncrementNote,
+  layerSetMuted
 })(Layer);

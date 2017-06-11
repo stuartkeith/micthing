@@ -23,16 +23,17 @@ export default function playback(store) {
         return;
       }
 
-      const note = layer.notes[index % layer.notes.length];
+      const volume = layer.notes[index % layer.notes.length];
 
-      if (!note) {
+      if (volume <= 0) {
         return;
       }
 
       const buffer = buffersByLayerId[layer.id];
 
       playBuffer(audioContext.destination, buffer, {
-        delay: beatTime
+        delay: beatTime,
+        volume
       });
     });
 

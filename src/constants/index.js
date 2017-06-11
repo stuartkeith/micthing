@@ -1,3 +1,5 @@
+export const NOTE_VALUES = [0, 0.3, 1];
+
 export const MICROPHONE_STATE = {
   DISABLED: 'DISABLED',
   ENABLED: 'ENABLED',

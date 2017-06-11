@@ -1,7 +1,10 @@
+import { NOTE_VALUES } from '../constants';
+
 export const CAPTURING_START = 'CAPTURING_START';
 export const CAPTURING_STOP = 'CAPTURING_STOP';
 export const LAYER_ADD = 'LAYER_ADD';
 export const LAYER_REMOVE = 'LAYER_REMOVE';
+export const LAYER_INCREMENT_NOTE = 'LAYER_INCREMENT_NOTE';
 export const LAYER_SET_MUTED = 'LAYER_SET_MUTED';
 export const LAYER_SET_NOTE = 'LAYER_SET_NOTE';
 export const MICROPHONE_DISABLE = 'MICROPHONE_DISABLE';
@@ -31,7 +34,15 @@ export function capturingStop() {
 }
 
 export function layerAdd(layerId, buffer) {
-  const notes = new Array(16).fill(0).map(_ => Math.random() > 0.7);
+  const notes = new Array(16).fill(0).map(function () {
+    if (Math.random() <= 0.7) {
+      return 0;
+    }
+
+    const randomIndex = 1 + Math.floor((NOTE_VALUES.length - 1) * Math.random());
+
+    return NOTE_VALUES[randomIndex];
+  });
 
   return {
     type: LAYER_ADD,
@@ -52,6 +63,15 @@ export function layerSetMuted(layerId, value) {
   return {
     type: LAYER_SET_MUTED,
     layerId,
+    value
+  };
+}
+
+export function layerIncrementNote(layerId, index, value) {
+  return {
+    type: LAYER_INCREMENT_NOTE,
+    layerId,
+    index,
     value
   };
 }
