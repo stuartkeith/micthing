@@ -21,6 +21,7 @@ export const RECORDING_START = 'RECORDING_START';
 export const RECORDING_STOP = 'RECORDING_STOP';
 export const RECORDING_THRESHOLD_SET = 'RECORDING_THRESHOLD_SET';
 export const SWING_SET = 'SWING_SET';
+export const VOLUME_SET = 'VOLUME_SET';
 
 export function capturingStart() {
   return {
@@ -174,6 +175,13 @@ export function recordingThresholdSet(value) {
 export function swingSet(value) {
   return {
     type: SWING_SET,
+    value
+  };
+}
+
+export function volumeSet(value) {
+  return {
+    type: VOLUME_SET,
     value
   };
 }

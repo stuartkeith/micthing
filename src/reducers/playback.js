@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { PLAYBACK_START, PLAYBACK_STOP, SWING_SET } from '../actions';
+import { PLAYBACK_START, PLAYBACK_STOP, SWING_SET, VOLUME_SET } from '../actions';
 
 function isPlaying(state = false, action) {
   switch (action.type) {
@@ -21,7 +21,17 @@ function swing(state = 0, action) {
   }
 }
 
+function volume(state = 1, action) {
+  switch (action.type) {
+    case VOLUME_SET:
+      return action.value;
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   isPlaying,
-  swing
+  swing,
+  volume
 });

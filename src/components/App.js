@@ -99,13 +99,23 @@ class App extends React.Component {
           </Button>
         </div>
         {layers.length ?
-          <div className="flex mb3">
+          <div className="flex mb4">
             <Button
               isDown={isPlaying}
               onClick={isPlaying ? playbackStop : playbackStart}
             >
               Play
             </Button>
+            <div className="w1" />
+            <Range
+              min={0}
+              max={1}
+              step={0.01}
+              value={volume}
+              onChange={volumeSet}
+            >
+              Volume: {Math.floor(volume * 100)}%
+            </Range>
             <div className="w1" />
             <Range
               min={0}
@@ -138,7 +148,8 @@ function mapStateToProps(state) {
     layers: state.layers.list,
     microphoneState: state.microphone.state,
     supportRequirements: state.support.requirements,
-    swing: state.playback.swing
+    swing: state.playback.swing,
+    volume: state.playback.volume
   };
 }
 
@@ -147,5 +158,6 @@ export default connect(mapStateToProps, {
   playbackStop,
   recordingStart,
   recordingStop,
-  swingSet
+  swingSet,
+  volumeSet
 })(App);

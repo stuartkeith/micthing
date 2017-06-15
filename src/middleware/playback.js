@@ -34,7 +34,7 @@ export default function playback(store) {
 
       playBuffer(audioContext.destination, buffer, {
         delay: beatTime + (beatLength * swing),
-        volume
+        volume: volume * state.playback.volume
       });
     });
 
