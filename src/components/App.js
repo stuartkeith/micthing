@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 import { connect } from 'react-redux';
-import { playbackStart, playbackStop, recordingStart, recordingStop, swingSet } from '../actions';
+import { playbackStart, playbackStop, recordingStart, recordingStop, swingSet, volumeSet } from '../actions';
 import { MICROPHONE_STATE } from '../constants';
 import Button from './Button';
 import IconCheck from './IconCheck';
@@ -82,8 +82,8 @@ class App extends React.Component {
   }
 
   renderRecorder() {
-    const { isCapturing, isPlaying, isRecording, layers, swing } = this.props;
-    const { playbackStart, playbackStop, recordingStart, recordingStop, swingSet } = this.props;
+    const { isCapturing, isPlaying, isRecording, layers, swing, volume } = this.props;
+    const { playbackStart, playbackStop, recordingStart, recordingStop, swingSet, volumeSet } = this.props;
 
     return (
       <div className="ma6">
