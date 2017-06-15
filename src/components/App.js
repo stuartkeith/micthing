@@ -92,7 +92,6 @@ class App extends React.Component {
         </div>
         <div className="flex mb3">
           <Button
-            hasMargin
             isDown={isRecording}
             onClick={isRecording ? recordingStop : recordingStart}
           >
@@ -102,12 +101,12 @@ class App extends React.Component {
         {layers.length ?
           <div className="flex mb3">
             <Button
-              hasMargin
               isDown={isPlaying}
               onClick={isPlaying ? playbackStop : playbackStart}
             >
               Play
             </Button>
+            <div className="w1" />
             <Range
               min={0}
               max={0.95}

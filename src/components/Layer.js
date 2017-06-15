@@ -44,18 +44,18 @@ class Layer extends React.Component {
     return (
       <div className="flex mb3" key={layer.id}>
         <Button
-          hasMargin
           onClick={() => layerRemove(layer.id)}
         >
           Remove
         </Button>
+        <div className="w1" />
         <Button
-          hasMargin
           isDown={layer.isMuted}
           onClick={() => layerSetMuted(layer.id, !layer.isMuted)}
         >
           Mute
         </Button>
+        <div className="w1" />
         <div className="flex relative">
           {layer.notes.map((note, index) => (
             <div
