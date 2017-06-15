@@ -8,6 +8,19 @@
   border-bottom-width: 1px;
 }
 
+.input-range-reset {
+  appearance: none;
+  padding: 0; /* Firefox */
+}
+
+.lh-2 {
+  line-height: 2rem;
+}
+
+.pointer-events-none {
+  pointer-events: none;
+}
+
 .transform-origin-left {
   transform-origin: left;
 }
