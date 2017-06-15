@@ -1,12 +1,13 @@
 import classNames from 'classnames';
 import React from 'react';
 import { connect } from 'react-redux';
-import { playbackStart, playbackStop, recordingStart, recordingStop } from '../actions';
+import { playbackStart, playbackStop, recordingStart, recordingStop, swingSet } from '../actions';
 import { MICROPHONE_STATE } from '../constants';
 import Button from './Button';
 import IconCheck from './IconCheck';
 import IconWarning from './IconWarning';
 import Layer from './Layer';
+import Range from './Range';
 import VolumeMeter from './VolumeMeter';
 import './App.css';
 
@@ -81,8 +82,8 @@ class App extends React.Component {
   }
 
   renderRecorder() {
-    const { isCapturing, isPlaying, isRecording, layers } = this.props;
-    const { playbackStart, playbackStop, recordingStart, recordingStop } = this.props;
+    const { isCapturing, isPlaying, isRecording, layers, swing } = this.props;
+    const { playbackStart, playbackStop, recordingStart, recordingStop, swingSet } = this.props;
 
     return (
       <div className="ma6">
@@ -97,17 +98,29 @@ class App extends React.Component {
           >
             Record
           </Button>
-          {layers.length ?
+        </div>
+        {layers.length ?
+          <div className="flex mb3">
             <Button
+              hasMargin
               isDown={isPlaying}
               onClick={isPlaying ? playbackStop : playbackStart}
             >
               Play
             </Button>
-            :
-            null
-          }
-        </div>
+            <Range
+              min={0}
+              max={0.95}
+              step={0.01}
+              value={swing}
+              onChange={swingSet}
+            >
+              Swing: {Math.floor(swing * 100)}%
+            </Range>
+          </div>
+          :
+          null
+        }
         {isCapturing ? <p className="ma0 h2">...</p> : null}
         {layers.map((layer) => (
           <Layer key={layer.id} layer={layer} />
@@ -125,7 +138,8 @@ function mapStateToProps(state) {
     isSupported: state.support.isSupported,
     layers: state.layers.list,
     microphoneState: state.microphone.state,
-    supportRequirements: state.support.requirements
+    supportRequirements: state.support.requirements,
+    swing: state.playback.swing
   };
 }
 
@@ -133,5 +147,6 @@ export default connect(mapStateToProps, {
   playbackStart,
   playbackStop,
   recordingStart,
-  recordingStop
+  recordingStop,
+  swingSet
 })(App);
