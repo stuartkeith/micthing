@@ -58,20 +58,20 @@ function list(state = [], action) {
       ];
     case LAYER_REMOVE:
       return state.filter(layerObj => layerObj.id !== action.layerId);
+    case LAYER_CLEAR:
+    case LAYER_INCREMENT_NOTE:
+    case LAYER_SET_MUTED:
+    case LAYER_SET_NOTE:
+      return state.map(function (layerObj) {
+        if (layerObj.id === action.layerId) {
+          return layer(layerObj, action);
+        }
+
+        return layerObj;
+      });
     default:
+      return state;
   }
-
-  if (action.layerId) {
-    return state.map(function (layerObj) {
-      if (layerObj.id === action.layerId) {
-        return layer(layerObj, action);
-      }
-
-      return layerObj;
-    });
-  }
-
-  return state;
 }
 
 function nextId(state = 1, action) {
