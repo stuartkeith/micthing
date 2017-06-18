@@ -83,7 +83,7 @@ class App extends React.Component {
 
   renderRecorder() {
     const { bpm, isCapturing, isPlaying, isRecording, layers, swing, volume } = this.props;
-    const { bpmSet, playbackStart, playbackStop, recordingStart, recordingStop, swingSet, volumeSet } = this.props;
+    const { onBpmSet, onPlaybackStart, onPlaybackStop, onRecordingStart, onRecordingStop, onSwingSet, onVolumeSet } = this.props;
 
     return (
       <div className="ma6">
@@ -93,7 +93,7 @@ class App extends React.Component {
         <div className="flex mb3">
           <Button
             isDown={isRecording}
-            onClick={isRecording ? recordingStop : recordingStart}
+            onClick={isRecording ? onRecordingStop : onRecordingStart}
           >
             Record
           </Button>
@@ -102,7 +102,7 @@ class App extends React.Component {
           <div className="flex mb4">
             <Button
               isDown={isPlaying}
-              onClick={isPlaying ? playbackStop : playbackStart}
+              onClick={isPlaying ? onPlaybackStop : onPlaybackStart}
             >
               Play
             </Button>
@@ -112,7 +112,7 @@ class App extends React.Component {
               max={1}
               step={0.01}
               value={volume}
-              onChange={volumeSet}
+              onChange={onVolumeSet}
             >
               Volume: {Math.floor(volume * 100)}%
             </Range>
@@ -122,7 +122,7 @@ class App extends React.Component {
               max={BPM_MAXIMUM}
               step={1}
               value={bpm}
-              onChange={bpmSet}
+              onChange={onBpmSet}
             >
               BPM: {bpm}
             </Range>
@@ -132,7 +132,7 @@ class App extends React.Component {
               max={0.95}
               step={0.01}
               value={swing}
-              onChange={swingSet}
+              onChange={onSwingSet}
             >
               Swing: {Math.floor(swing * 100)}%
             </Range>
@@ -165,11 +165,11 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  bpmSet,
-  playbackStart,
-  playbackStop,
-  recordingStart,
-  recordingStop,
-  swingSet,
-  volumeSet
+  onBpmSet: bpmSet,
+  onPlaybackStart: playbackStart,
+  onPlaybackStop: playbackStop,
+  onRecordingStart: recordingStart,
+  onRecordingStop: recordingStop,
+  onSwingSet: swingSet,
+  onVolumeSet: volumeSet
 })(App);
