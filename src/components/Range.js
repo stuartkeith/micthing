@@ -14,7 +14,7 @@ class Range extends React.Component {
   render() {
     const { children, min, max, step, value } = this.props;
 
-    const ratio = 1 - ((value - min) / max);
+    const ratio = 1 - ((value - min) / (max - min));
 
     const indicatorStyle = {
       transform: `translate3d(${ratio * -100}%, 0, 0)`
