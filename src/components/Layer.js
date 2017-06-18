@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { layerClear, layerIncrementNote, layerRemove, layerSetMuted } from '../actions';
+import { layerClear, layerIncrementNote, layerRemove, layerSetMuted, layerSetVolume } from '../actions';
 import { playbackListenerAdd, playbackListenerRemove } from '../actions';
 import Button from './Button';
+import Range from './Range';
 
 function getOpacity(value) {
   const minimum = 0.2;
@@ -40,7 +41,7 @@ class Layer extends React.Component {
 
   render() {
     const { layer } = this.props;
-    const { onClear, onIncrementNote, onRemove, onSetMuted } = this.props;
+    const { onClear, onIncrementNote, onRemove, onSetMuted, onSetVolume } = this.props;
 
     const layerHasNotes = layer.notes.find(value => value > 0) !== undefined;
 
@@ -51,6 +52,16 @@ class Layer extends React.Component {
         >
           {layerHasNotes ? 'Clear' : 'Remove'}
         </Button>
+        <div className="w1" />
+        <Range
+          min={0}
+          max={1}
+          step={0.01}
+          value={layer.volume}
+          onChange={(value) => onSetVolume(layer.id, value)}
+        >
+          Volume: {Math.floor(layer.volume * 100)}%
+        </Range>
         <div className="w1" />
         <Button
           isDown={layer.isMuted}
@@ -81,8 +92,9 @@ class Layer extends React.Component {
 export default connect(null, {
   onClear: layerClear,
   onIncrementNote: layerIncrementNote,
+  onPlaybackListenerAdd: playbackListenerAdd,
+  onPlaybackListenerRemove: playbackListenerRemove,
   onRemove: layerRemove,
   onSetMuted: layerSetMuted,
-  onPlaybackListenerAdd: playbackListenerAdd,
-  onPlaybackListenerRemove: playbackListenerRemove
+  onSetVolume: layerSetVolume
 })(Layer);

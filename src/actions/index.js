@@ -9,6 +9,7 @@ export const LAYER_REMOVE = 'LAYER_REMOVE';
 export const LAYER_INCREMENT_NOTE = 'LAYER_INCREMENT_NOTE';
 export const LAYER_SET_MUTED = 'LAYER_SET_MUTED';
 export const LAYER_SET_NOTE = 'LAYER_SET_NOTE';
+export const LAYER_SET_VOLUME = 'LAYER_SET_VOLUME';
 export const MICROPHONE_DISABLE = 'MICROPHONE_DISABLE';
 export const MICROPHONE_ENABLE = 'MICROPHONE_ENABLE';
 export const MICROPHONE_REQUEST = 'MICROPHONE_REQUEST';
@@ -101,6 +102,14 @@ export function layerSetNote(layerId, index, value) {
     index,
     value
   }
+}
+
+export function layerSetVolume(layerId, value) {
+  return {
+    type: LAYER_SET_VOLUME,
+    layerId,
+    value
+  };
 }
 
 export function microphoneDisable() {

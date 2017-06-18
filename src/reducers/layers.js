@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { LAYER_ADD, LAYER_CLEAR, LAYER_REMOVE, LAYER_INCREMENT_NOTE, LAYER_SET_MUTED, LAYER_SET_NOTE } from '../actions';
+import { LAYER_ADD, LAYER_CLEAR, LAYER_REMOVE, LAYER_INCREMENT_NOTE, LAYER_SET_MUTED, LAYER_SET_NOTE, LAYER_SET_VOLUME } from '../actions';
 import { NOTE_VALUES } from '../constants';
 
 function layer(state, action) {
@@ -8,7 +8,8 @@ function layer(state, action) {
       return {
         id: action.layerId,
         notes: action.notes,
-        isMuted: false
+        isMuted: false,
+        volume: 1
       };
     case LAYER_CLEAR:
       return Object.assign({}, state, {
@@ -44,6 +45,10 @@ function layer(state, action) {
           return action.value;
         })
       });
+    case LAYER_SET_VOLUME:
+      return Object.assign({}, state, {
+        volume: action.value
+      });
     default:
       return state;
   }
@@ -62,6 +67,7 @@ function list(state = [], action) {
     case LAYER_INCREMENT_NOTE:
     case LAYER_SET_MUTED:
     case LAYER_SET_NOTE:
+    case LAYER_SET_VOLUME:
       return state.map(function (layerObj) {
         if (layerObj.id === action.layerId) {
           return layer(layerObj, action);

@@ -22,7 +22,7 @@ export default function playback(store) {
     visualScheduler.push(index, beatTime);
 
     state.layers.list.forEach(function (layer) {
-      if (layer.isMuted) {
+      if (layer.isMuted || layer.volume === 0) {
         return;
       }
 
@@ -36,7 +36,7 @@ export default function playback(store) {
 
       playBuffer(audioContext.destination, buffer, {
         delay: beatTime + (beatLength * swing),
-        volume: volume * state.playback.volume
+        volume: volume * state.playback.volume * layer.volume
       });
     });
 
