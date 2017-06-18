@@ -60,7 +60,7 @@ class Layer extends React.Component {
           value={layer.volume}
           onChange={(value) => onSetVolume(layer.id, value)}
         >
-          Volume: {Math.floor(layer.volume * 100)}%
+          Volume
         </Range>
         <div className="w1" />
         <Button

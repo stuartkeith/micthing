@@ -114,7 +114,7 @@ class App extends React.Component {
               value={volume}
               onChange={onVolumeSet}
             >
-              Volume: {Math.floor(volume * 100)}%
+              Volume
             </Range>
             <div className="w1" />
             <Range
