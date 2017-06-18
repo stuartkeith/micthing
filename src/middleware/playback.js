@@ -15,6 +15,8 @@ export default function playback(store) {
     const state = store.getState();
     const swing = nextIndex % 2 ? state.playback.swing : 0;
 
+    scheduler.bpm = state.playback.bpm;
+
     index = nextIndex;
 
     visualScheduler.push(index, beatTime);

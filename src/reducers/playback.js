@@ -1,5 +1,14 @@
 import { combineReducers } from 'redux';
-import { PLAYBACK_START, PLAYBACK_STOP, SWING_SET, VOLUME_SET } from '../actions';
+import { BPM_SET, PLAYBACK_START, PLAYBACK_STOP, SWING_SET, VOLUME_SET } from '../actions';
+
+function bpm(state = 120, action) {
+  switch (action.type) {
+    case BPM_SET:
+      return action.value;
+    default:
+      return state;
+  }
+}
 
 function isPlaying(state = false, action) {
   switch (action.type) {
@@ -31,6 +40,7 @@ function volume(state = 1, action) {
 }
 
 export default combineReducers({
+  bpm,
   isPlaying,
   swing,
   volume

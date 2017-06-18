@@ -1,5 +1,6 @@
 import { NOTE_VALUES } from '../constants';
 
+export const BPM_SET = 'BPM_SET';
 export const CAPTURING_START = 'CAPTURING_START';
 export const CAPTURING_STOP = 'CAPTURING_STOP';
 export const LAYER_ADD = 'LAYER_ADD';
@@ -22,6 +23,13 @@ export const RECORDING_STOP = 'RECORDING_STOP';
 export const RECORDING_THRESHOLD_SET = 'RECORDING_THRESHOLD_SET';
 export const SWING_SET = 'SWING_SET';
 export const VOLUME_SET = 'VOLUME_SET';
+
+export function bpmSet(value) {
+  return {
+    type: BPM_SET,
+    value
+  };
+}
 
 export function capturingStart() {
   return {

@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import React from 'react';
 import { connect } from 'react-redux';
-import { playbackStart, playbackStop, recordingStart, recordingStop, swingSet, volumeSet } from '../actions';
-import { MICROPHONE_STATE } from '../constants';
+import { bpmSet, playbackStart, playbackStop, recordingStart, recordingStop, swingSet, volumeSet } from '../actions';
+import { BPM_MINIMUM, BPM_MAXIMUM, MICROPHONE_STATE } from '../constants';
 import Button from './Button';
 import IconCheck from './IconCheck';
 import IconWarning from './IconWarning';
@@ -82,8 +82,8 @@ class App extends React.Component {
   }
 
   renderRecorder() {
-    const { isCapturing, isPlaying, isRecording, layers, swing, volume } = this.props;
-    const { playbackStart, playbackStop, recordingStart, recordingStop, swingSet, volumeSet } = this.props;
+    const { bpm, isCapturing, isPlaying, isRecording, layers, swing, volume } = this.props;
+    const { bpmSet, playbackStart, playbackStop, recordingStart, recordingStop, swingSet, volumeSet } = this.props;
 
     return (
       <div className="ma6">
@@ -118,6 +118,16 @@ class App extends React.Component {
             </Range>
             <div className="w1" />
             <Range
+              min={BPM_MINIMUM}
+              max={BPM_MAXIMUM}
+              step={1}
+              value={bpm}
+              onChange={bpmSet}
+            >
+              BPM: {bpm}
+            </Range>
+            <div className="w1" />
+            <Range
               min={0}
               max={0.95}
               step={0.01}
@@ -141,6 +151,7 @@ class App extends React.Component {
 
 function mapStateToProps(state) {
   return {
+    bpm: state.playback.bpm,
     isCapturing: state.recorder.isCapturing,
     isPlaying: state.playback.isPlaying,
     isRecording: state.recorder.isRecording,
@@ -154,6 +165,7 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
+  bpmSet,
   playbackStart,
   playbackStop,
   recordingStart,

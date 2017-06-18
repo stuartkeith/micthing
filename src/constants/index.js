@@ -1,4 +1,5 @@
-export const NOTE_VALUES = [0, 0.3, 1];
+export const BPM_MINIMUM = 40;
+export const BPM_MAXIMUM = 200;
 
 export const MICROPHONE_STATE = {
   DISABLED: 'DISABLED',
@@ -6,3 +7,5 @@ export const MICROPHONE_STATE = {
   INIT: 'INIT',
   REQUESTED_PERMISSION: 'REQUESTED_PERMISSION'
 };
+
+export const NOTE_VALUES = [0, 0.3, 1];
