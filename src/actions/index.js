@@ -4,6 +4,7 @@ export const BPM_SET = 'BPM_SET';
 export const CAPTURING_START = 'CAPTURING_START';
 export const CAPTURING_STOP = 'CAPTURING_STOP';
 export const LAYER_ADD = 'LAYER_ADD';
+export const LAYER_CLEAR = 'LAYER_CLEAR';
 export const LAYER_REMOVE = 'LAYER_REMOVE';
 export const LAYER_INCREMENT_NOTE = 'LAYER_INCREMENT_NOTE';
 export const LAYER_SET_MUTED = 'LAYER_SET_MUTED';
@@ -59,6 +60,13 @@ export function layerAdd(layerId, buffer) {
     layerId,
     buffer,
     notes
+  };
+}
+
+export function layerClear(layerId) {
+  return {
+    type: LAYER_CLEAR,
+    layerId
   };
 }
 

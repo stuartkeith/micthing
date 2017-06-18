@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { LAYER_ADD, LAYER_REMOVE, LAYER_INCREMENT_NOTE, LAYER_SET_MUTED, LAYER_SET_NOTE } from '../actions';
+import { LAYER_ADD, LAYER_CLEAR, LAYER_REMOVE, LAYER_INCREMENT_NOTE, LAYER_SET_MUTED, LAYER_SET_NOTE } from '../actions';
 import { NOTE_VALUES } from '../constants';
 
 function layer(state, action) {
@@ -10,6 +10,10 @@ function layer(state, action) {
         notes: action.notes,
         isMuted: false
       };
+    case LAYER_CLEAR:
+      return Object.assign({}, state, {
+        notes: state.notes.map(_ => 0)
+      });
     case LAYER_INCREMENT_NOTE:
       return Object.assign({}, state, {
         notes: state.notes.map(function (note, index) {

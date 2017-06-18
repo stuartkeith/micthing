@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { playbackListenerAdd, playbackListenerRemove, layerRemove, layerIncrementNote, layerSetMuted } from '../actions';
+import { playbackListenerAdd, playbackListenerRemove, layerClear, layerRemove, layerIncrementNote, layerSetMuted } from '../actions';
 import Button from './Button';
 
 function getOpacity(value) {
@@ -39,14 +39,16 @@ class Layer extends React.Component {
 
   render() {
     const { layer } = this.props;
-    const { layerRemove, layerSetMuted, layerIncrementNote } = this.props;
+    const { layerClear, layerRemove, layerSetMuted, layerIncrementNote } = this.props;
+
+    const layerHasNotes = layer.notes.find(value => value > 0) !== undefined;
 
     return (
       <div className="flex mb3" key={layer.id}>
         <Button
-          onClick={() => layerRemove(layer.id)}
+          onClick={() => layerHasNotes ? layerClear(layer.id) : layerRemove(layer.id)}
         >
-          Remove
+          {layerHasNotes ? 'Clear' : 'Remove'}
         </Button>
         <div className="w1" />
         <Button
@@ -78,6 +80,7 @@ class Layer extends React.Component {
 export default connect(null, {
   playbackListenerAdd,
   playbackListenerRemove,
+  layerClear,
   layerRemove,
   layerIncrementNote,
   layerSetMuted
