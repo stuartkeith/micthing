@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { playbackListenerAdd, playbackListenerRemove, layerClear, layerRemove, layerIncrementNote, layerSetMuted } from '../actions';
+import { layerClear, layerIncrementNote, layerRemove, layerSetMuted } from '../actions';
+import { playbackListenerAdd, playbackListenerRemove } from '../actions';
 import Button from './Button';
 
 function getOpacity(value) {
@@ -18,11 +19,11 @@ class Layer extends React.Component {
   }
 
   componentDidMount() {
-    this.props.playbackListenerAdd(this.updatePlaybackIndex);
+    this.props.onPlaybackListenerAdd(this.updatePlaybackIndex);
   }
 
   componentWillUnmount() {
-    this.props.playbackListenerRemove(this.updatePlaybackIndex);
+    this.props.onPlaybackListenerRemove(this.updatePlaybackIndex);
   }
 
   setPlaybackElement(element) {
@@ -39,21 +40,21 @@ class Layer extends React.Component {
 
   render() {
     const { layer } = this.props;
-    const { layerClear, layerRemove, layerSetMuted, layerIncrementNote } = this.props;
+    const { onClear, onIncrementNote, onRemove, onSetMuted } = this.props;
 
     const layerHasNotes = layer.notes.find(value => value > 0) !== undefined;
 
     return (
       <div className="flex mb3" key={layer.id}>
         <Button
-          onClick={() => layerHasNotes ? layerClear(layer.id) : layerRemove(layer.id)}
+          onClick={() => layerHasNotes ? onClear(layer.id) : onRemove(layer.id)}
         >
           {layerHasNotes ? 'Clear' : 'Remove'}
         </Button>
         <div className="w1" />
         <Button
           isDown={layer.isMuted}
-          onClick={() => layerSetMuted(layer.id, !layer.isMuted)}
+          onClick={() => onSetMuted(layer.id, !layer.isMuted)}
         >
           Mute
         </Button>
@@ -64,7 +65,7 @@ class Layer extends React.Component {
               key={index}
               className="w2 h2 bg-white light-gray pointer ba"
               style={{opacity: getOpacity(note)}}
-              onClick={() => layerIncrementNote(layer.id, index, note)}
+              onClick={() => onIncrementNote(layer.id, index, note)}
             />
           ))}
           <div
@@ -78,10 +79,10 @@ class Layer extends React.Component {
 }
 
 export default connect(null, {
-  playbackListenerAdd,
-  playbackListenerRemove,
-  layerClear,
-  layerRemove,
-  layerIncrementNote,
-  layerSetMuted
+  onClear: layerClear,
+  onIncrementNote: layerIncrementNote,
+  onRemove: layerRemove,
+  onSetMuted: layerSetMuted,
+  onPlaybackListenerAdd: playbackListenerAdd,
+  onPlaybackListenerRemove: playbackListenerRemove
 })(Layer);
