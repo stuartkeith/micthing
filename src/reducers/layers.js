@@ -12,11 +12,13 @@ function layer(state, action) {
         volume: 1
       };
     case LAYER_CLEAR:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         notes: state.notes.map(_ => 0)
-      });
+      };
     case LAYER_INCREMENT_NOTE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         notes: state.notes.map(function (note, index) {
           if (index !== action.index) {
             return note;
@@ -30,13 +32,15 @@ function layer(state, action) {
 
           return 0;
         })
-      });
+      };
     case LAYER_SET_MUTED:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isMuted: action.value
-      });
+      };
     case LAYER_SET_NOTE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         notes: state.notes.map(function (note, index) {
           if (index !== action.index) {
             return note;
@@ -44,11 +48,12 @@ function layer(state, action) {
 
           return action.value;
         })
-      });
+      };
     case LAYER_SET_VOLUME:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         volume: action.value
-      });
+      };
     default:
       return state;
   }
