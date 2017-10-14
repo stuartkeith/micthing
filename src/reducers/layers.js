@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { LAYER_ADD, LAYER_CLEAR, LAYER_REMOVE, LAYER_INCREMENT_NOTE, LAYER_SET_MUTED, LAYER_SET_NOTE, LAYER_SET_VOLUME } from '../actions';
+import { LAYER_ADD, LAYER_CLEAR, LAYER_REMOVE, LAYER_INCREMENT_NOTE, LAYER_LOAD_NOTES, LAYER_SAVE_NOTES, LAYER_SET_MUTED, LAYER_SET_NOTE, LAYER_SET_VOLUME } from '../actions';
 import { NOTE_VALUES } from '../constants';
 
 function layer(state, action) {
@@ -8,6 +8,7 @@ function layer(state, action) {
       return {
         id: action.layerId,
         notes: action.notes,
+        savedNotes: [],
         isMuted: false,
         volume: 1
       };
@@ -33,6 +34,11 @@ function layer(state, action) {
           return 0;
         })
       };
+    case LAYER_LOAD_NOTES:
+      return {
+        ...state,
+        notes: action.notes
+      };
     case LAYER_SET_MUTED:
       return {
         ...state,
@@ -54,6 +60,14 @@ function layer(state, action) {
         ...state,
         volume: action.value
       };
+    case LAYER_SAVE_NOTES:
+      return {
+        ...state,
+        savedNotes: [
+          ...state.savedNotes,
+          action.notes
+        ]
+      };
     default:
       return state;
   }
@@ -70,6 +84,8 @@ function list(state = [], action) {
       return state.filter(layerObj => layerObj.id !== action.layerId);
     case LAYER_CLEAR:
     case LAYER_INCREMENT_NOTE:
+    case LAYER_LOAD_NOTES:
+    case LAYER_SAVE_NOTES:
     case LAYER_SET_MUTED:
     case LAYER_SET_NOTE:
     case LAYER_SET_VOLUME:
