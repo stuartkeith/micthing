@@ -24,3 +24,19 @@
 .transform-origin-left {
   transform-origin: left;
 }
+
+.animation-opacity-pulse {
+  animation-duration: 350ms;
+  animation-iteration-count: infinite;
+  animation-name: pulse;
+}
+
+@keyframes pulse {
+  from {
+    opacity: 0.2;
+  }
+
+  to {
+    opacity: 0.5;
+  }
+}

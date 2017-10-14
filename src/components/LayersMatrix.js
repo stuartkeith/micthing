@@ -23,7 +23,7 @@ class LayersMatrix extends React.Component {
                 className={cn(
                   'w2 h2 lh-2 bg-white dark-gray tc small',
                   notes === layer.notes ? 'o-20' : 'pointer',
-                  notes === layer.queuedNotes ? 'o-50' : null
+                  notes === layer.queuedNotes ? 'animation-opacity-pulse' : null
                 )}
                 onMouseEnter={() => this.onMouseEnter(layer, notes)}
               >
