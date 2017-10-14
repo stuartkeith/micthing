@@ -5,6 +5,10 @@ import playback from './playback';
 import recorder from './recorder';
 import support from './support';
 
+export function getNextLayerId(state) {
+  return state.layers.nextId;
+}
+
 export default combineReducers({
   layers,
   microphone,

@@ -1,6 +1,7 @@
 import { audioContext } from '../webaudio';
 import { RECORDING_LISTENER_ADD, RECORDING_LISTENER_REMOVE } from '../actions';
 import { capturingStart, capturingStop, layerAdd, playbackStart } from '../actions';
+import { getNextLayerId } from '../reducers';
 import MessageBus from '../utils/MessageBus';
 
 const BUFFER_SIZE = 2048;
@@ -141,7 +142,9 @@ export default function recorder(store) {
       recorder.reset();
 
       if (state.layers.list.length < 5) {
-        store.dispatch(layerAdd(state.layers.nextId, buffer));
+        const nextLayerId = getNextLayerId(store.getState());
+
+        store.dispatch(layerAdd(nextLayerId, buffer));
 
         if (state.layers.list.length === 0) {
           store.dispatch(playbackStart());
