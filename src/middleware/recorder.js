@@ -1,4 +1,3 @@
-import '../webaudio/polyfills';
 import { audioContext } from '../webaudio';
 import { RECORDING_LISTENER_ADD, RECORDING_LISTENER_REMOVE } from '../actions';
 import { capturingStart, capturingStop, layerAdd, playbackStart } from '../actions';
