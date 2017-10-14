@@ -37,9 +37,17 @@ class LayersMatrix extends React.Component {
   }
 
   onMouseEnter(layer, notes) {
-    if (layer.notes !== notes || layer.queuedNotes !== notes) {
-      this.props.onSelect(layer.id, notes);
+    // if we've queued something, we don't want to re-queue the same thing
+    if (layer.queuedNotes && (layer.queuedNotes === notes)) {
+      return;
     }
+
+    // if we haven't queued something, we don't want to queue the existing playback
+    if (!layer.queuedNotes && (layer.notes === notes)) {
+      return;
+    }
+
+    this.props.onSelect(layer.id, notes);
   }
 }
 
