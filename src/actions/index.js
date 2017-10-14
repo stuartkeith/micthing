@@ -8,6 +8,7 @@ export const LAYER_CLEAR = 'LAYER_CLEAR';
 export const LAYER_REMOVE = 'LAYER_REMOVE';
 export const LAYER_INCREMENT_NOTE = 'LAYER_INCREMENT_NOTE';
 export const LAYER_LOAD_NOTES = 'LAYER_LOAD_NOTES';
+export const LAYER_QUEUE_NOTES = 'LAYER_QUEUE_NOTES';
 export const LAYER_SAVE_NOTES = 'LAYER_SAVE_NOTES';
 export const LAYER_SET_MUTED = 'LAYER_SET_MUTED';
 export const LAYER_SET_NOTE = 'LAYER_SET_NOTE';
@@ -83,6 +84,14 @@ export function layerRemove(layerId) {
 export function layerLoadNotes(layerId, notes) {
   return {
     type: LAYER_LOAD_NOTES,
+    layerId,
+    notes
+  };
+}
+
+export function layerQueueNotes(layerId, notes) {
+  return {
+    type: LAYER_QUEUE_NOTES,
     layerId,
     notes
   };

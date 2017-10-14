@@ -1,12 +1,13 @@
-import cn from '../utils/cn';
 import React from 'react';
 import { connect } from 'react-redux';
 import { bpmSet, playbackStart, playbackStop, recordingStart, recordingStop, swingSet, volumeSet } from '../actions';
 import { BPM_MINIMUM, BPM_MAXIMUM, MICROPHONE_STATE } from '../constants';
+import cn from '../utils/cn';
 import Button from './Button';
 import IconCheck from './IconCheck';
 import IconWarning from './IconWarning';
 import Layer from './Layer';
+import LayersMatrix from './LayersMatrix';
 import Range from './Range';
 import VolumeMeter from './VolumeMeter';
 import './App.css';
@@ -17,7 +18,7 @@ class App extends React.Component {
 
     if (!isSupported) {
       return (
-        <div className="ma6">
+        <div className="ma5">
           <h1 className="f2 lh-title">Sorry...</h1>
           <p className="f4 lh-copy mb4">
             Your browser doesn't support all the features we need.
@@ -56,7 +57,7 @@ class App extends React.Component {
     switch (microphoneState) {
       case MICROPHONE_STATE.DISABLED:
         return (
-          <div className="ma6">
+          <div className="ma5">
             <h1 className="f2 lh-title">Sorry...</h1>
             <p className="f4 lh-copy">
               We can't access your microphone.
@@ -65,7 +66,7 @@ class App extends React.Component {
         );
       case MICROPHONE_STATE.REQUESTED_PERMISSION:
         return (
-          <div className="ma6">
+          <div className="ma5">
             <h1 className="f2 lh-title">Hi.</h1>
             <p className="f4 lh-copy">
               Please allow us to use your microphone.
@@ -86,7 +87,7 @@ class App extends React.Component {
     const { onBpmSet, onPlaybackStart, onPlaybackStop, onRecordingStart, onRecordingStop, onSwingSet, onVolumeSet } = this.props;
 
     return (
-      <div className="ma6">
+      <div className="ma5">
         <div className="mb3">
           <VolumeMeter />
         </div>
@@ -144,6 +145,7 @@ class App extends React.Component {
         {layers.map((layer) => (
           <Layer key={layer.id} layer={layer} />
         ))}
+        <LayersMatrix layers={layers} />
       </div>
     );
   }

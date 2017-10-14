@@ -1,5 +1,5 @@
-import cn from '../utils/cn';
 import React from 'react';
+import cn from '../utils/cn';
 
 function Button({ children, disabled, isDown, onClick }) {
   return (
