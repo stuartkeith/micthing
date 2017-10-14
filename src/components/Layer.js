@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import cn from '../utils/cn';
 import React from 'react';
 import { connect } from 'react-redux';
 import { layerClear, layerIncrementNote, layerLoadNotes, layerRemove, layerSaveNotes, layerSetMuted, layerSetVolume } from '../actions';
@@ -99,7 +99,7 @@ class Layer extends React.Component {
           {layer.savedNotes.map((notes, index) => (
             <div
               key={index}
-              className={classNames(
+              className={cn(
                 'w1 h1 lh-1 bg-white dark-gray tc small',
                 index > 0 ? 'ml2' : null,
                 notes === layer.notes ? 'o-50' : 'pointer'

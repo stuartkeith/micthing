@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import cn from '../utils/cn';
 import React from 'react';
 import { connect } from 'react-redux';
 import { bpmSet, playbackStart, playbackStop, recordingStart, recordingStop, swingSet, volumeSet } from '../actions';
@@ -25,7 +25,7 @@ class App extends React.Component {
           {supportRequirements.map((requirement, index) => (
             <div
               key={index}
-              className={classNames(
+              className={cn(
                 'mb4',
                 requirement.isSupported ? 'o-60' : null
               )}
