@@ -16,7 +16,7 @@ export default function playback(store) {
     index = nextIndex;
 
     // if first beat, load any queued notes first
-    if (index === 0) {
+    if (index % 16 === 0) {
       const layers = store.getState().layers;
 
       layers.list.forEach(function (layer) {
@@ -52,7 +52,7 @@ export default function playback(store) {
       });
     });
 
-    nextIndex = index === 15 ? 0 : (index + 1);
+    nextIndex = index + 1;
   };
 
   visualScheduler.callback = function (value) {
