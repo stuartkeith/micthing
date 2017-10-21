@@ -1,47 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { layerClear, layerIncrementNote, layerRemove, layerSaveNotes, layerSetMuted, layerSetVolume } from '../actions';
-import { playbackListenerAdd, playbackListenerRemove } from '../actions';
+import { layerClear, layerRemove, layerSaveNotes, layerSetMuted, layerSetVolume } from '../actions';
 import Button from './Button';
+import Notes from './Notes';
 import Range from './Range';
 
-function getOpacity(value) {
-  const minimum = 0.2;
-
-  return minimum + ((1 - minimum) * value);
-}
-
 class Layer extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.setPlaybackElement = this.setPlaybackElement.bind(this);
-    this.updatePlaybackIndex = this.updatePlaybackIndex.bind(this);
-  }
-
-  componentDidMount() {
-    this.props.onPlaybackListenerAdd(this.updatePlaybackIndex);
-  }
-
-  componentWillUnmount() {
-    this.props.onPlaybackListenerRemove(this.updatePlaybackIndex);
-  }
-
-  setPlaybackElement(element) {
-    this.playbackElement = element;
-  }
-
-  updatePlaybackIndex(value) {
-    const { layer } = this.props;
-
-    const percentage = (value % layer.notes.length) * 100;
-
-    this.playbackElement.style.transform = `translate3d(${percentage}%, -100%, 0)`;
-  }
-
   render() {
     const { layer } = this.props;
-    const { onClear, onIncrementNote, onRemove, onSave, onSetMuted, onSetVolume } = this.props;
+    const { onClear, onRemove, onSave, onSetMuted, onSetVolume } = this.props;
 
     const hasNotes = layer.notes.find(value => value > 0) !== undefined;
     const canSave = hasNotes && (layer.savedNotes.indexOf(layer.notes) === -1);
@@ -78,20 +45,7 @@ class Layer extends React.Component {
           Save
         </Button>
         <div className="w1" />
-        <div className="flex relative">
-          {layer.notes.map((note, index) => (
-            <div
-              key={index}
-              className="w2 h2 bg-white light-gray pointer ba"
-              style={{opacity: getOpacity(note)}}
-              onClick={() => onIncrementNote(layer.id, index, note)}
-            />
-          ))}
-          <div
-            ref={this.setPlaybackElement}
-            className="w2 h1 bg-gold absolute left-0 top-0"
-          />
-        </div>
+        <Notes layerId={layer.id} notes={layer.notes} />
       </div>
     );
   }
@@ -99,9 +53,6 @@ class Layer extends React.Component {
 
 export default connect(null, {
   onClear: layerClear,
-  onIncrementNote: layerIncrementNote,
-  onPlaybackListenerAdd: playbackListenerAdd,
-  onPlaybackListenerRemove: playbackListenerRemove,
   onRemove: layerRemove,
   onSave: layerSaveNotes,
   onSetMuted: layerSetMuted,

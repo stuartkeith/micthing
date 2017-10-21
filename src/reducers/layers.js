@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
-import { LAYER_ADD, LAYER_CLEAR, LAYER_REMOVE, LAYER_INCREMENT_NOTE, LAYER_LOAD_NOTES, LAYER_QUEUE_NOTES, LAYER_SAVE_NOTES, LAYER_SET_MUTED, LAYER_SET_NOTE, LAYER_SET_VOLUME } from '../actions';
-import { NOTE_VALUES } from '../constants';
+import { LAYER_ADD, LAYER_CLEAR, LAYER_REMOVE, LAYER_LOAD_NOTES, LAYER_QUEUE_NOTES, LAYER_SAVE_NOTES, LAYER_SET_MUTED, LAYER_SET_NOTE, LAYER_SET_VOLUME } from '../actions';
 
 function layer(state, action) {
   switch (action.type) {
@@ -17,23 +16,6 @@ function layer(state, action) {
       return {
         ...state,
         notes: state.notes.map(_ => 0)
-      };
-    case LAYER_INCREMENT_NOTE:
-      return {
-        ...state,
-        notes: state.notes.map(function (note, index) {
-          if (index !== action.index) {
-            return note;
-          }
-
-          for (let i = 0; i < NOTE_VALUES.length; i++) {
-            if (NOTE_VALUES[i] > action.value) {
-              return NOTE_VALUES[i];
-            }
-          }
-
-          return 0;
-        })
       };
     case LAYER_LOAD_NOTES:
       return {
@@ -90,7 +72,6 @@ function list(state = [], action) {
     case LAYER_REMOVE:
       return state.filter(layerObj => layerObj.id !== action.layerId);
     case LAYER_CLEAR:
-    case LAYER_INCREMENT_NOTE:
     case LAYER_LOAD_NOTES:
     case LAYER_QUEUE_NOTES:
     case LAYER_SAVE_NOTES:
