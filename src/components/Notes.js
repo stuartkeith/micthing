@@ -28,8 +28,9 @@ class Notes extends React.Component {
     this.onMouseMove = this.onMouseMove.bind(this);
     this.onMouseUp = this.onMouseUp.bind(this);
 
-    this.setPlaybackElement = this.setPlaybackElement.bind(this);
     this.updatePlaybackIndex = this.updatePlaybackIndex.bind(this);
+
+    this.playbackRef = React.createRef();
   }
 
   componentDidMount() {
@@ -50,16 +51,12 @@ class Notes extends React.Component {
     this.props.onPlaybackListenerRemove(this.updatePlaybackIndex);
   }
 
-  setPlaybackElement(element) {
-    this.playbackElement = element;
-  }
-
   updatePlaybackIndex(value) {
     const { notes } = this.props;
 
     const percentage = (value % notes.length) * 100;
 
-    this.playbackElement.style.transform = `translate3d(${percentage}%, -100%, 0)`;
+    this.playbackRef.current.style.transform = `translate3d(${percentage}%, -100%, 0)`;
   }
 
   onMouseDown(event) {
@@ -135,7 +132,7 @@ class Notes extends React.Component {
           />
         ))}
         <div
-          ref={this.setPlaybackElement}
+          ref={this.playbackRef}
           className="w2 h1 bg-gold absolute left-0 top-0"
         />
       </div>

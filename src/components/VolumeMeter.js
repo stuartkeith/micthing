@@ -8,7 +8,8 @@ class VolumeMeter extends React.Component {
 
     this.audioInputListener = this.audioInputListener.bind(this);
     this.onClick = this.onClick.bind(this);
-    this.setElement = this.setElement.bind(this);
+
+    this.indicatorRef = React.createRef();
   }
 
   componentDidMount() {
@@ -20,7 +21,7 @@ class VolumeMeter extends React.Component {
   }
 
   audioInputListener(maxSample) {
-    this.element.style.transform = `scale3d(${maxSample}, 1, 1)`;
+    this.indicatorRef.current.style.transform = `scale3d(${maxSample}, 1, 1)`;
   }
 
   onClick(event) {
@@ -38,10 +39,6 @@ class VolumeMeter extends React.Component {
     this.props.recordingThresholdSet(value);
   }
 
-  setElement(element) {
-    this.element = element;
-  }
-
   render() {
     const { recordingThreshold } = this.props;
 
@@ -51,7 +48,7 @@ class VolumeMeter extends React.Component {
 
     return (
       <div className="h2 bg-black overflow-hidden relative pointer" onClick={this.onClick}>
-        <div ref={this.setElement} className="absolute absolute--fill bg-white transform-origin-left" />
+        <div ref={this.indicatorRef} className="absolute absolute--fill bg-white transform-origin-left" />
         <div className="absolute absolute--fill transform-origin-left bl bw1 b--gold" style={arrowStyle} />
       </div>
     );
