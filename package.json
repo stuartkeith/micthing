@@ -8,12 +8,12 @@
     "eject": "react-scripts eject"
   },
   "dependencies": {
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1"
   },
   "devDependencies": {
-    "react-redux": "^5.0.6",
-    "react-scripts": "^1.0.14",
+    "react-redux": "^5.0.7",
+    "react-scripts": "^1.1.4",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6"
   },
