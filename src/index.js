@@ -5,11 +5,13 @@ import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux';
 import logger from 'redux-logger';
 import { Provider } from 'react-redux';
-import { microphoneDisable, microphoneEnable, microphoneRequest, notSupported } from './actions';
+import { microphoneDisable, microphoneEnable, microphoneRequest, notSupported, webaudioStateChange } from './actions';
 import App from './components/App';
 import middleware from './middleware';
 import reducer from './reducers';
 import { allRequirementsAreSupported, requirements } from './requirements';
+import { onNextUserGesture } from './utils/onNextUserGesture';
+import { audioContext } from './webaudio';
 
 const storeMiddleware = [];
 
@@ -25,6 +27,16 @@ const store = createStore(
   reducer,
   applyMiddleware(...storeMiddleware)
 );
+
+if (audioContext.state === 'suspended') {
+  store.dispatch(webaudioStateChange(true));
+
+  onNextUserGesture(function () {
+    audioContext
+      .resume()
+      .then(() => store.dispatch(webaudioStateChange(false)));
+  });
+}
 
 if (!allRequirementsAreSupported) {
   store.dispatch(notSupported(requirements));

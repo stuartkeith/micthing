@@ -25,6 +25,11 @@
   transform-origin: left;
 }
 
+.transform-center-y {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 .animation-opacity-pulse {
   animation-duration: 350ms;
   animation-iteration-count: infinite;

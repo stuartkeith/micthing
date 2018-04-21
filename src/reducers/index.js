@@ -4,6 +4,7 @@ import microphone from './microphone';
 import playback from './playback';
 import recorder from './recorder';
 import support from './support';
+import webaudio from './webaudio';
 
 export function getNextLayerId(state) {
   return state.layers.nextId;
@@ -14,5 +15,6 @@ export default combineReducers({
   microphone,
   playback,
   recorder,
-  support
+  support,
+  webaudio
 });

@@ -27,6 +27,7 @@ export const RECORDING_STOP = 'RECORDING_STOP';
 export const RECORDING_THRESHOLD_SET = 'RECORDING_THRESHOLD_SET';
 export const SWING_SET = 'SWING_SET';
 export const VOLUME_SET = 'VOLUME_SET';
+export const WEBAUDIO_STATE_CHANGE = 'WEBAUDIO_STATE_CHANGE';
 
 export function bpmSet(value) {
   return {
@@ -225,5 +226,12 @@ export function volumeSet(value) {
   return {
     type: VOLUME_SET,
     value
+  };
+}
+
+export function webaudioStateChange(isSuspended) {
+  return {
+    type: WEBAUDIO_STATE_CHANGE,
+    isSuspended
   };
 }

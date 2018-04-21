@@ -40,7 +40,7 @@ class VolumeMeter extends React.Component {
   }
 
   render() {
-    const { recordingThreshold } = this.props;
+    const { children, recordingThreshold } = this.props;
 
     const arrowStyle = {
       transform: `translate3d(${recordingThreshold * 100}%, 0, 0)`
@@ -50,6 +50,7 @@ class VolumeMeter extends React.Component {
       <div className="h2 bg-black overflow-hidden relative pointer" onClick={this.onClick}>
         <div ref={this.indicatorRef} className="absolute absolute--fill bg-white transform-origin-left" />
         <div className="absolute absolute--fill transform-origin-left bl bw1 b--gold" style={arrowStyle} />
+        {children ? <p className="ma0 ml2 absolute transform-center-y">{children}</p> : null}
       </div>
     );
   }

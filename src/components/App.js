@@ -83,13 +83,15 @@ class App extends React.Component {
   }
 
   renderRecorder() {
-    const { bpm, isCapturing, isPlaying, isRecording, layers, swing, volume } = this.props;
+    const { bpm, isCapturing, isPlaying, isRecording, layers, swing, volume, webAudioIsSuspended } = this.props;
     const { onBpmSet, onPlaybackStart, onPlaybackStop, onRecordingStart, onRecordingStop, onSwingSet, onVolumeSet } = this.props;
 
     return (
       <div className="ma5">
         <div className="mb3">
-          <VolumeMeter />
+          <VolumeMeter>
+            {webAudioIsSuspended ? 'Web Audio is waiting for your input...' : null}
+          </VolumeMeter>
         </div>
         <div className="flex mb3">
           <Button
@@ -162,7 +164,8 @@ function mapStateToProps(state) {
     microphoneState: state.microphone.state,
     supportRequirements: state.support.requirements,
     swing: state.playback.swing,
-    volume: state.playback.volume
+    volume: state.playback.volume,
+    webAudioIsSuspended: state.webaudio.isSuspended
   };
 }
 
