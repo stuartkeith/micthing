@@ -1,7 +1,7 @@
 import audioContext from './audioContext';
 
 export default function playBuffer(destinationNode, buffer, options = {}) {
-  const { delay = 0, playbackRate = 1, volume = 1, offset = 0, duration = buffer.length } = options;
+  const { delay = 0, playbackRate = 1, volume = 1, offset = 0, duration = undefined } = options;
 
   const gainNode = audioContext.createGain();
   gainNode.gain.value = volume;
