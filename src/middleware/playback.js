@@ -10,11 +10,8 @@ export default function playback(store) {
   const visualScheduler = new VisualScheduler();
 
   let index = 0;
-  let nextIndex = 0;
 
   scheduler.callback = function (beatTime, beatLength) {
-    index = nextIndex;
-
     // if first beat, load any queued notes first
     if (index % 16 === 0) {
       const layers = store.getState().layers;
@@ -29,7 +26,7 @@ export default function playback(store) {
     visualScheduler.push(index, beatTime);
 
     const state = store.getState();
-    const swing = nextIndex % 2 ? state.playback.swing : 0;
+    const swing = index % 2 ? state.playback.swing : 0;
 
     scheduler.bpm = state.playback.bpm;
 
@@ -52,7 +49,7 @@ export default function playback(store) {
       });
     });
 
-    nextIndex = index + 1;
+    index++;
   };
 
   visualScheduler.callback = function (value) {
@@ -77,7 +74,7 @@ export default function playback(store) {
           indexMessageBus.removeListener(action.callback);
           break;
         case PLAYBACK_START:
-          nextIndex = 0;
+          index = 0;
 
           scheduler.start();
           break;
