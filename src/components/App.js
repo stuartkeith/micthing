@@ -108,7 +108,7 @@ class App extends React.Component {
             >
               Play
             </Button>
-            <div className="w1" />
+            <span className="w1 flex-none" />
             <Range
               min={0}
               max={1}
@@ -118,7 +118,7 @@ class App extends React.Component {
             >
               Volume
             </Range>
-            <div className="w1" />
+            <span className="w1 flex-none" />
             <Range
               min={BPM_MINIMUM}
               max={BPM_MAXIMUM}
@@ -128,7 +128,7 @@ class App extends React.Component {
             >
               BPM: {bpm}
             </Range>
-            <div className="w1" />
+            <span className="w1 flex-none" />
             <Range
               min={0}
               max={0.95}
