@@ -10,7 +10,6 @@ import Layer from './Layer';
 import LayersMatrix from './LayersMatrix';
 import Range from './Range';
 import VolumeMeter from './VolumeMeter';
-import './App.css';
 
 class App extends React.Component {
   render() {

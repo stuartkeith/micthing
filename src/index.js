@@ -12,6 +12,7 @@ import reducer from './reducers';
 import { allRequirementsAreSupported, requirements } from './requirements';
 import { onNextUserGesture } from './utils/onNextUserGesture';
 import { audioContext } from './webaudio';
+import './index.css';
 
 const storeMiddleware = [];
 
