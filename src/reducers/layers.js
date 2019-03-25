@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { LAYER_ADD, LAYER_CLEAR, LAYER_REMOVE, LAYER_LOAD_NOTES, LAYER_QUEUE_NOTES, LAYER_SAVE_NOTES, LAYER_SET_MUTED, LAYER_SET_NOTE, LAYER_SET_VOLUME } from '../actions';
+import { LAYER_ADD, LAYER_CLEAR, LAYER_REMOVE, LAYER_REMOVE_ALL, LAYER_LOAD_NOTES, LAYER_QUEUE_NOTES, LAYER_SAVE_NOTES, LAYER_SET_MUTED, LAYER_SET_NOTE, LAYER_SET_VOLUME } from '../actions';
 
 function layer(state, action) {
   switch (action.type) {
@@ -71,6 +71,8 @@ function list(state = [], action) {
       ];
     case LAYER_REMOVE:
       return state.filter(layerObj => layerObj.id !== action.layerId);
+    case LAYER_REMOVE_ALL:
+      return [];
     case LAYER_CLEAR:
     case LAYER_LOAD_NOTES:
     case LAYER_QUEUE_NOTES:

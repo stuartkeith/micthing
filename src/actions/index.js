@@ -6,6 +6,7 @@ export const CAPTURING_STOP = 'CAPTURING_STOP';
 export const LAYER_ADD = 'LAYER_ADD';
 export const LAYER_CLEAR = 'LAYER_CLEAR';
 export const LAYER_REMOVE = 'LAYER_REMOVE';
+export const LAYER_REMOVE_ALL = 'LAYER_REMOVE_ALL';
 export const LAYER_LOAD_NOTES = 'LAYER_LOAD_NOTES';
 export const LAYER_QUEUE_NOTES = 'LAYER_QUEUE_NOTES';
 export const LAYER_SAVE_NOTES = 'LAYER_SAVE_NOTES';
@@ -78,6 +79,12 @@ export function layerRemove(layerId) {
   return {
     type: LAYER_REMOVE,
     layerId
+  };
+}
+
+export function layerRemoveAll() {
+  return {
+    type: LAYER_REMOVE_ALL
   };
 }
 
