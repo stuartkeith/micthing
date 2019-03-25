@@ -5,7 +5,7 @@ import { audioContext, playBuffer, Scheduler, VisualScheduler } from '../webaudi
 
 export default function playback(store) {
   const buffersByLayerId = {};
-  const indexMessageBus = new MessageBus();
+  const indexMessageBus = new MessageBus(0);
   const scheduler = new Scheduler();
   const visualScheduler = new VisualScheduler();
 

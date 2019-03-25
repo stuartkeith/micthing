@@ -98,7 +98,7 @@ export default function recorder(store) {
   const audioRecorder = audioContext.createScriptProcessor(BUFFER_SIZE, 2, 2);
   const inputBufferL = new Float32Array(BUFFER_SIZE);
   const inputBufferR = new Float32Array(BUFFER_SIZE);
-  const maxSampleMessageBus = new MessageBus();
+  const maxSampleMessageBus = new MessageBus(0);
   const recordBufferLength = Math.floor(MAX_RECORD_SECONDS * audioContext.sampleRate);
   const recorder = new Recorder(recordBufferLength);
 

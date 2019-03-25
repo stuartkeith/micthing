@@ -1,10 +1,13 @@
 class MessageBus {
-  constructor() {
+  constructor(initialValue) {
+    this.lastValue = initialValue;
     this.listeners = [];
   }
 
   addListener(listener) {
     this.listeners.push(listener);
+
+    listener(this.lastValue);
   }
 
   removeListener(listener) {
@@ -18,6 +21,8 @@ class MessageBus {
   }
 
   update(value) {
+    this.lastValue = value;
+
     for (let i = this.listeners.length - 1; i >= 0; i--) {
       this.listeners[i](value);
     }
