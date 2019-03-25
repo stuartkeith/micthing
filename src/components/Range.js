@@ -21,7 +21,7 @@ class Range extends React.Component {
     };
 
     return (
-      <div className="relative">
+      <div className="relative flex-none">
         <input
           type="range"
           className="input-range-reset pointer absolute w-100 h-100"
