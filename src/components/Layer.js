@@ -14,13 +14,13 @@ class Layer extends React.Component {
     const canSave = hasNotes && (layer.savedNotes.indexOf(layer.notes) === -1);
 
     return (
-      <div className="mb3 flex">
+      <div className="pb3 flex">
         <Button
           onClick={() => hasNotes ? onClear(layer.id) : onRemove(layer.id)}
         >
           {hasNotes ? 'Clear' : 'Remove'}
         </Button>
-        <div className="w1" />
+        <span className="w1 flex-none" />
         <Range
           min={0}
           max={1}
@@ -30,21 +30,21 @@ class Layer extends React.Component {
         >
           Volume
         </Range>
-        <div className="w1" />
+        <span className="w1 flex-none" />
         <Button
           isDown={layer.isMuted}
           onClick={() => onSetMuted(layer.id, !layer.isMuted)}
         >
           Mute
         </Button>
-        <div className="w1" />
+        <span className="w1 flex-none" />
         <Button
           disabled={!canSave}
           onClick={() => onSave(layer.id, layer.notes)}
         >
           Save
         </Button>
-        <div className="w1" />
+        <span className="w1 flex-none" />
         <Notes layerId={layer.id} notes={layer.notes} />
       </div>
     );
