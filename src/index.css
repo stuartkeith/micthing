@@ -30,6 +30,14 @@
   transform: translateY(-50%);
 }
 
+.flex-grow-0 {
+  flex-grow: 0;
+}
+
+.ma-auto {
+  margin: auto;
+}
+
 .animation-opacity-pulse {
   animation-duration: 350ms;
   animation-iteration-count: infinite;

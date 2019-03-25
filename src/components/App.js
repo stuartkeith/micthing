@@ -11,81 +11,92 @@ import LayersMatrix from './LayersMatrix';
 import Range from './Range';
 import VolumeMeter from './VolumeMeter';
 
-class App extends React.Component {
-  render() {
-    const { isSupported, microphoneState, supportRequirements } = this.props;
+function Overlay({ children }) {
+  return (
+    <div className="pa3 fixed absolute--fill bg-black-70 flex overflow-scroll">
+      <div className="bg-red flex-auto flex-grow-0 ma-auto">
+        {children}
+      </div>
+    </div>
+  )
+}
 
-    if (!isSupported) {
-      return (
-        <div className="ma5">
-          <h1 className="f2 lh-title">Sorry...</h1>
-          <p className="f4 lh-copy mb4">
-            Your browser doesn't support all the features we need.
-          </p>
-          {supportRequirements.map((requirement, index) => (
-            <div
-              key={index}
-              className={cn(
-                'mb4',
-                requirement.isSupported ? 'o-60' : null
-              )}
-            >
-              <h2 className="lh-title">
-                <span className="dib w2 h2 v-mid mr3">
-                  {requirement.isSupported ?
-                    <IconCheck />
-                    :
-                    <IconWarning />
-                  }
-                </span>
-                <span className="v-mid">
-                  {requirement.title} is {!requirement.isSupported ? ' not ' : null} supported
-                </span>
-              </h2>
-              <p>
-                {requirement.description}
-                {' '}
-                <a className="color-inherit" target="_blank" rel="noopener noreferrer" href={requirement.link}>Find out more</a>.
-              </p>
-            </div>
-          ))}
-        </div>
-      );
-    }
-
-    switch (microphoneState) {
-      case MICROPHONE_STATE.DISABLED:
-        return (
-          <div className="ma5">
-            <h1 className="f2 lh-title">Sorry...</h1>
-            <p className="f4 lh-copy">
-              We can't access your microphone.
-            </p>
-          </div>
-        );
-      case MICROPHONE_STATE.REQUESTED_PERMISSION:
-        return (
-          <div className="ma5">
-            <h1 className="f2 lh-title">Hi.</h1>
-            <p className="f4 lh-copy">
-              Please allow us to use your microphone.
-            </p>
-            <p className="f5 lh-copy">(look up)</p>
-          </div>
-        );
-      case MICROPHONE_STATE.ENABLED:
-        return this.renderRecorder();
-      default:
-    }
-
+function NotSupportedOverlay({ isSupported, supportRequirements }) {
+  if (isSupported) {
     return null;
   }
 
-  renderRecorder() {
-    const { bpm, isCapturing, isPlaying, isRecording, layers, swing, volume, webAudioIsSuspended } = this.props;
-    const { onBpmSet, onPlaybackStart, onPlaybackStop, onRecordingStart, onRecordingStop, onSwingSet, onVolumeSet } = this.props;
+  return (
+    <Overlay>
+      <div className="ma5">
+        <h1 className="f2 lh-title mt0">Sorry...</h1>
+        <p className="f4 lh-copy mb4">
+          Your browser doesn't support all the features we need.
+        </p>
+        {supportRequirements.map((requirement, index) => (
+          <div
+            key={index}
+            className={cn(
+              'mb4',
+              requirement.isSupported ? 'o-60' : null
+            )}
+          >
+            <h2 className="lh-title mt0">
+              <span className="dib w2 h2 v-mid mr3">
+                {requirement.isSupported ?
+                  <IconCheck />
+                  :
+                  <IconWarning />
+                }
+              </span>
+              <span className="v-mid">
+                {requirement.title} is {!requirement.isSupported ? ' not ' : null} supported
+              </span>
+            </h2>
+            <p>
+              {requirement.description}
+              {' '}
+              <a className="color-inherit" target="_blank" rel="noopener noreferrer" href={requirement.link}>Find out more</a>.
+            </p>
+          </div>
+        ))}
+      </div>
+    </Overlay>
+  );
+}
 
-    return (
+function MicrophoneMessage({ microphoneState }) {
+  switch (microphoneState) {
+    case MICROPHONE_STATE.DISABLED:
+      return (
+        <div className="ma5">
+          <h1 className="f2 lh-title mt0">Sorry...</h1>
+          <p className="f4 lh-copy">
+            We can't access your microphone.
+          </p>
+        </div>
+      );
+    case MICROPHONE_STATE.REQUESTED_PERMISSION:
+      return (
+        <div className="ma5">
+          <h1 className="f2 lh-title mt0">Hi.</h1>
+          <p className="f4 lh-copy">
+            Please allow us to use your microphone.
+          </p>
+          <p className="f5 lh-copy">(look up)</p>
+        </div>
+      );
+    default:
+      return null;
+  }
+}
+
+function App(props) {
+  const { bpm, isCapturing, isPlaying, isRecording, isSupported, layers, microphoneState, supportRequirements, swing, volume, webAudioIsSuspended } = props;
+  const { onBpmSet, onPlaybackStart, onPlaybackStop, onRecordingStart, onRecordingStop, onSwingSet, onVolumeSet } = props;
+
+  return (
+    <>
       <div className="ma5">
         <div className="mb3">
           <VolumeMeter>
@@ -148,8 +159,10 @@ class App extends React.Component {
         ))}
         <LayersMatrix layers={layers} />
       </div>
-    );
-  }
+      <MicrophoneMessage microphoneState={microphoneState} />
+      <NotSupportedOverlay isSupported={isSupported} supportRequirements={supportRequirements} />
+    </>
+  );
 }
 
 function mapStateToProps(state) {
