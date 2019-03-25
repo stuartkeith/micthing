@@ -13,6 +13,8 @@ class VolumeMeter extends React.Component {
   }
 
   componentDidMount() {
+    this.audioInputListener(0);
+
     this.props.recordingListenerAdd(this.audioInputListener);
   }
 
