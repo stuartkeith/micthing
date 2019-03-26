@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { layerClear, layerRemove, layerSaveNotes, layerSetMuted, layerSetVolume } from '../actions';
+import { NOTE_VALUE_OFF } from '../constants';
 import Button from './Button';
 import Notes from './Notes';
 import Range from './Range';
@@ -10,7 +11,7 @@ class Layer extends React.Component {
     const { layer } = this.props;
     const { onClear, onRemove, onSave, onSetMuted, onSetVolume } = this.props;
 
-    const hasNotes = layer.notes.find(value => value > 0) !== undefined;
+    const hasNotes = layer.notes.find(value => value !== NOTE_VALUE_OFF) !== undefined;
     const canSave = hasNotes && (layer.savedNotes.indexOf(layer.notes) === -1);
 
     return (

@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import { LAYER_ADD, LAYER_CLEAR, LAYER_REMOVE, LAYER_REMOVE_ALL, LAYER_LOAD_NOTES, LAYER_QUEUE_NOTES, LAYER_SAVE_NOTES, LAYER_SET_MUTED, LAYER_SET_NOTE, LAYER_SET_VOLUME } from '../actions';
+import { NOTE_VALUE_OFF } from '../constants';
 
 function layer(state, action) {
   switch (action.type) {
@@ -15,7 +16,7 @@ function layer(state, action) {
     case LAYER_CLEAR:
       return {
         ...state,
-        notes: state.notes.map(_ => 0)
+        notes: state.notes.map(_ => NOTE_VALUE_OFF)
       };
     case LAYER_LOAD_NOTES:
       return {
