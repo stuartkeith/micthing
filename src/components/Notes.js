@@ -1,12 +1,19 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { layerSetNote, playbackListenerAdd, playbackListenerRemove } from '../actions';
-import { NOTE_VALUES } from '../constants';
+import { NOTE_VALUE_OFF, NOTE_VALUE_ON, NOTE_VALUE_ACCENT } from '../constants';
 
-function getOpacity(value) {
-  const minimum = 0.2;
-
-  return minimum + ((1 - minimum) * value);
+function getOpacity(noteValue) {
+  switch (noteValue) {
+    case NOTE_VALUE_OFF:
+      return 0.2;
+    case NOTE_VALUE_ON:
+      return 0.4;
+    case NOTE_VALUE_ACCENT:
+      return 1;
+    default:
+      throw new Error('unhandled noteValue ' + noteValue);
+  }
 }
 
 function getElementIndex(parentElement, childElement) {
@@ -76,9 +83,9 @@ class Notes extends React.Component {
     let noteValue;
 
     if (timeSinceLastMouseDown <= 300) {
-      noteValue = NOTE_VALUES[NOTE_VALUES.length - 1];
+      noteValue = NOTE_VALUE_ACCENT;
     } else {
-      noteValue = this.props.notes[noteIndex] === NOTE_VALUES[0] ? NOTE_VALUES[1] : NOTE_VALUES[0];
+      noteValue = this.props.notes[noteIndex] === NOTE_VALUE_OFF ? NOTE_VALUE_ON : NOTE_VALUE_OFF;
     }
 
     this.setState({

@@ -1,4 +1,4 @@
-import { NOTE_VALUES } from '../constants';
+import { NOTE_VALUE_OFF, NOTE_VALUE_ON, NOTE_VALUE_ACCENT } from '../constants';
 
 export const BPM_SET = 'BPM_SET';
 export const CAPTURING_START = 'CAPTURING_START';
@@ -52,12 +52,10 @@ export function capturingStop() {
 export function layerAdd(layerId, buffer) {
   const notes = new Array(16).fill(0).map(function () {
     if (Math.random() <= 0.7) {
-      return 0;
+      return NOTE_VALUE_OFF;
     }
 
-    const randomIndex = 1 + Math.floor((NOTE_VALUES.length - 1) * Math.random());
-
-    return NOTE_VALUES[randomIndex];
+    return Math.random() >= 0.75 ? NOTE_VALUE_ACCENT : NOTE_VALUE_ON;
   });
 
   return {

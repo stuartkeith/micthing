@@ -1,7 +1,21 @@
 import { LAYER_ADD, LAYER_REMOVE, PLAYBACK_LISTENER_ADD, PLAYBACK_LISTENER_REMOVE, PLAYBACK_START, PLAYBACK_STOP } from '../actions';
 import { layerLoadNotes } from '../actions';
+import { NOTE_VALUE_OFF, NOTE_VALUE_ON, NOTE_VALUE_ACCENT } from '../constants';
 import MessageBus from '../utils/MessageBus';
 import { audioContext, playBuffer, Scheduler, VisualScheduler } from '../webaudio';
+
+function getNoteValueVolume(noteValue) {
+  switch (noteValue) {
+    case NOTE_VALUE_OFF:
+      return 0;
+    case NOTE_VALUE_ON:
+      return 0.7;
+    case NOTE_VALUE_ACCENT:
+      return 1;
+    default:
+      throw new Error('unhandled noteValue - ' + noteValue);
+  }
+}
 
 export default function playback(store) {
   const buffersByLayerId = {};
@@ -35,7 +49,8 @@ export default function playback(store) {
         return;
       }
 
-      const volume = layer.notes[index % layer.notes.length];
+      const noteValue = layer.notes[index % layer.notes.length];
+      const volume = getNoteValueVolume(noteValue);
 
       if (volume <= 0) {
         return;

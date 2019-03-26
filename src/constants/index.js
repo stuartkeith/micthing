@@ -8,4 +8,6 @@ export const MICROPHONE_STATE = {
   REQUESTED_PERMISSION: 'REQUESTED_PERMISSION'
 };
 
-export const NOTE_VALUES = [0, 0.3, 1];
+export const NOTE_VALUE_OFF = 'NOTE_VALUE_OFF';
+export const NOTE_VALUE_ON = 'NOTE_VALUE_ON';
+export const NOTE_VALUE_ACCENT = 'NOTE_VALUE_ACCENT';
