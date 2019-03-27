@@ -16,7 +16,7 @@ import './index.css';
 
 const storeMiddleware = [];
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production' && window.location.search.indexOf('nolog') < 0) {
   storeMiddleware.push(logger);
 }
 
