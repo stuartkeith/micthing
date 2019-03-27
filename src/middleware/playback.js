@@ -2,7 +2,7 @@ import { LAYER_ADD, LAYER_REMOVE, LAYER_SET_VOLUME, PLAYBACK_LISTENER_ADD, PLAYB
 import { layerLoadNotes } from '../actions';
 import { NOTE_VALUE_OFF, NOTE_VALUE_ON, NOTE_VALUE_ACCENT } from '../constants';
 import MessageBus from '../utils/MessageBus';
-import { audioContext, playBuffer, Scheduler, VisualScheduler } from '../webaudio';
+import { audioContext, Scheduler, VisualScheduler } from '../webaudio';
 
 function getNoteValueVolume(noteValue) {
   switch (noteValue) {
@@ -20,6 +20,7 @@ function getNoteValueVolume(noteValue) {
 export default function playback(store) {
   const masterGain = audioContext.createGain();
   const gainsByLayerId = new Map();
+  const bufferSourcesByLayerId = new Map();
   const buffersByLayerId = new Map();
   const indexMessageBus = new MessageBus(0);
   const scheduler = new Scheduler();
@@ -28,6 +29,37 @@ export default function playback(store) {
   masterGain.connect(audioContext.destination);
 
   let index = 0;
+
+  const playBuffer = function (layer, volume, time, beatLength) {
+    // stop sound already playing for this layer to avoid overlaps.
+    // base it on the beat length to adapt to faster/slower BPMs.
+    if (bufferSourcesByLayerId.has(layer.id)) {
+      const [bufferSource, bufferGain, time, volume] = bufferSourcesByLayerId.get(layer.id);
+
+      const stopTime = time + (beatLength * 3);
+
+      bufferSource.stop(stopTime);
+
+      bufferGain.gain.setValueAtTime(volume, time);
+      bufferGain.gain.linearRampToValueAtTime(0, stopTime);
+    }
+
+    const layerGain = gainsByLayerId.get(layer.id);
+    const buffer = buffersByLayerId.get(layer.id);
+
+    const bufferGain = audioContext.createGain();
+    bufferGain.gain.value = volume;
+
+    const bufferSource = audioContext.createBufferSource();
+    bufferSource.buffer = buffer;
+
+    bufferSource.connect(bufferGain);
+    bufferGain.connect(layerGain);
+
+    bufferSource.start(time);
+
+    bufferSourcesByLayerId.set(layer.id, [bufferSource, bufferGain, time, volume]);
+  };
 
   scheduler.callback = function (beatTime, beatLength) {
     // if first beat, load any queued notes first
@@ -60,13 +92,7 @@ export default function playback(store) {
         return;
       }
 
-      const gain = gainsByLayerId.get(layer.id);
-      const buffer = buffersByLayerId.get(layer.id);
-
-      playBuffer(gain, buffer, {
-        delay: beatTime + (beatLength * swing),
-        volume
-      });
+      playBuffer(layer, volume, beatTime + (beatLength * swing), beatLength);
     });
 
     index++;
