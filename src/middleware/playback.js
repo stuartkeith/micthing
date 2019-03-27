@@ -1,4 +1,4 @@
-import { LAYER_ADD, LAYER_REMOVE, LAYER_SET_VOLUME, PLAYBACK_LISTENER_ADD, PLAYBACK_LISTENER_REMOVE, PLAYBACK_START, PLAYBACK_STOP, VOLUME_SET } from '../actions';
+import { LAYER_ADD, LAYER_REMOVE, LAYER_REMOVE_ALL, LAYER_SET_VOLUME, PLAYBACK_LISTENER_ADD, PLAYBACK_LISTENER_REMOVE, PLAYBACK_START, PLAYBACK_STOP, VOLUME_SET } from '../actions';
 import { layerLoadNotes } from '../actions';
 import { NOTE_VALUE_OFF, NOTE_VALUE_ON, NOTE_VALUE_ACCENT } from '../constants';
 import MessageBus from '../utils/MessageBus';
@@ -114,7 +114,13 @@ export default function playback(store) {
           break;
         case LAYER_REMOVE:
           gainsByLayerId.delete(action.layerId, gain);
+          bufferSourcesByLayerId.delete(action.layerId);
           buffersByLayerId.delete(action.layerId);
+          break;
+        case LAYER_REMOVE_ALL:
+          gainsByLayerId.clear();
+          bufferSourcesByLayerId.clear();
+          buffersByLayerId.clear();
           break;
         case LAYER_SET_VOLUME:
           gainsByLayerId.get(action.layerId).gain.value = Math.pow(action.value, 1.6);
