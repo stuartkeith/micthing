@@ -18,7 +18,7 @@ function getNoteValueVolume(noteValue) {
 }
 
 export default function playback(store) {
-  const buffersByLayerId = {};
+  const buffersByLayerId = new Map();
   const indexMessageBus = new MessageBus(0);
   const scheduler = new Scheduler();
   const visualScheduler = new VisualScheduler();
@@ -56,7 +56,7 @@ export default function playback(store) {
         return;
       }
 
-      const buffer = buffersByLayerId[layer.id];
+      const buffer = buffersByLayerId.get(layer.id);
 
       playBuffer(audioContext.destination, buffer, {
         delay: beatTime + (beatLength * swing),
@@ -75,10 +75,10 @@ export default function playback(store) {
     return function (action) {
       switch (action.type) {
         case LAYER_ADD:
-          buffersByLayerId[action.layerId] = action.buffer;
+          buffersByLayerId.set(action.layerId, action.buffer);
           break;
         case LAYER_REMOVE:
-          delete buffersByLayerId[action.layerId];
+          buffersByLayerId.delete(action.layerId);
           break;
         case PLAYBACK_LISTENER_ADD:
           action.callback(index);
