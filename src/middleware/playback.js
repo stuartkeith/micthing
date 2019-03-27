@@ -1,4 +1,4 @@
-import { LAYER_ADD, LAYER_REMOVE, PLAYBACK_LISTENER_ADD, PLAYBACK_LISTENER_REMOVE, PLAYBACK_START, PLAYBACK_STOP } from '../actions';
+import { LAYER_ADD, LAYER_REMOVE, PLAYBACK_LISTENER_ADD, PLAYBACK_LISTENER_REMOVE, PLAYBACK_START, PLAYBACK_STOP, VOLUME_SET } from '../actions';
 import { layerLoadNotes } from '../actions';
 import { NOTE_VALUE_OFF, NOTE_VALUE_ON, NOTE_VALUE_ACCENT } from '../constants';
 import MessageBus from '../utils/MessageBus';
@@ -18,10 +18,13 @@ function getNoteValueVolume(noteValue) {
 }
 
 export default function playback(store) {
+  const masterGain = audioContext.createGain();
   const buffersByLayerId = new Map();
   const indexMessageBus = new MessageBus(0);
   const scheduler = new Scheduler();
   const visualScheduler = new VisualScheduler();
+
+  masterGain.connect(audioContext.destination);
 
   let index = 0;
 
@@ -58,9 +61,9 @@ export default function playback(store) {
 
       const buffer = buffersByLayerId.get(layer.id);
 
-      playBuffer(audioContext.destination, buffer, {
+      playBuffer(masterGain, buffer, {
         delay: beatTime + (beatLength * swing),
-        volume: volume * state.playback.volume * layer.volume
+        volume: volume * layer.volume
       });
     });
 
@@ -95,6 +98,9 @@ export default function playback(store) {
           break;
         case PLAYBACK_STOP:
           scheduler.stop();
+          break;
+        case VOLUME_SET:
+          masterGain.gain.value = Math.pow(action.value, 1.6);
           break;
         default:
       }
