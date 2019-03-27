@@ -4,7 +4,7 @@ export default function playBuffer(destinationNode, buffer, options = {}) {
   const { delay = 0, playbackRate = 1, volume = 1, offset = 0, duration = undefined } = options;
 
   const gainNode = audioContext.createGain();
-  gainNode.gain.value = volume;
+  gainNode.gain.value = Math.pow(volume, 1.6);
 
   const bufferSource = audioContext.createBufferSource();
   bufferSource.buffer = buffer;

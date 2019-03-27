@@ -1,4 +1,4 @@
-import { LAYER_ADD, LAYER_REMOVE, PLAYBACK_LISTENER_ADD, PLAYBACK_LISTENER_REMOVE, PLAYBACK_START, PLAYBACK_STOP, VOLUME_SET } from '../actions';
+import { LAYER_ADD, LAYER_REMOVE, LAYER_SET_VOLUME, PLAYBACK_LISTENER_ADD, PLAYBACK_LISTENER_REMOVE, PLAYBACK_START, PLAYBACK_STOP, VOLUME_SET } from '../actions';
 import { layerLoadNotes } from '../actions';
 import { NOTE_VALUE_OFF, NOTE_VALUE_ON, NOTE_VALUE_ACCENT } from '../constants';
 import MessageBus from '../utils/MessageBus';
@@ -19,6 +19,7 @@ function getNoteValueVolume(noteValue) {
 
 export default function playback(store) {
   const masterGain = audioContext.createGain();
+  const gainsByLayerId = new Map();
   const buffersByLayerId = new Map();
   const indexMessageBus = new MessageBus(0);
   const scheduler = new Scheduler();
@@ -59,11 +60,12 @@ export default function playback(store) {
         return;
       }
 
+      const gain = gainsByLayerId.get(layer.id);
       const buffer = buffersByLayerId.get(layer.id);
 
-      playBuffer(masterGain, buffer, {
+      playBuffer(gain, buffer, {
         delay: beatTime + (beatLength * swing),
-        volume: volume * layer.volume
+        volume
       });
     });
 
@@ -78,10 +80,18 @@ export default function playback(store) {
     return function (action) {
       switch (action.type) {
         case LAYER_ADD:
+          const gain = audioContext.createGain();
+          gain.connect(masterGain);
+
+          gainsByLayerId.set(action.layerId, gain);
           buffersByLayerId.set(action.layerId, action.buffer);
           break;
         case LAYER_REMOVE:
+          gainsByLayerId.delete(action.layerId, gain);
           buffersByLayerId.delete(action.layerId);
+          break;
+        case LAYER_SET_VOLUME:
+          gainsByLayerId.get(action.layerId).gain.value = Math.pow(action.value, 1.6);
           break;
         case PLAYBACK_LISTENER_ADD:
           action.callback(index);
