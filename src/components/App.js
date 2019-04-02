@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bpmSet, playbackStart, playbackStop, recordingStart, recordingStop, swingSet, volumeSet } from '../actions';
-import { BPM_MINIMUM, BPM_MAXIMUM, MICROPHONE_STATE } from '../constants';
+import { BPM_MINIMUM, BPM_MAXIMUM, MICROPHONE_STATE, RECORDING_STATE } from '../constants';
 import cn from '../utils/cn';
 import Button from './Button';
 import IconCheck from './IconCheck';
@@ -168,9 +168,9 @@ function App(props) {
 function mapStateToProps(state) {
   return {
     bpm: state.playback.bpm,
-    isCapturing: state.recorder.isCapturing,
+    isCapturing: state.recorder.recordingState === RECORDING_STATE.CAPTURING,
     isPlaying: state.playback.isPlaying,
-    isRecording: state.recorder.isRecording,
+    isRecording: state.recorder.recordingState !== RECORDING_STATE.OFF,
     isSupported: state.support.isSupported,
     layers: state.layers.list,
     microphoneState: state.microphone.state,

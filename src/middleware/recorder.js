@@ -1,6 +1,7 @@
 import { audioContext } from '../webaudio';
 import { RECORDING_LISTENER_ADD, RECORDING_LISTENER_REMOVE } from '../actions';
 import { capturingStart, capturingStop, layerAdd, recordingStop } from '../actions';
+import { RECORDING_STATE } from '../constants';
 import { getNextLayerId } from '../reducers';
 import MessageBus from '../utils/MessageBus';
 
@@ -136,7 +137,9 @@ export default function recorder(store) {
 
     const recordingThresholdTimeoutSamples = state.recorder.thresholdTimeoutSeconds * audioContext.sampleRate;
 
-    while (recorder.update(state.recorder.isRecording, state.recorder.threshold, recordingThresholdTimeoutSamples)) {
+    const isRecording = state.recorder.recordingState !== RECORDING_STATE.OFF;
+
+    while (recorder.update(isRecording, state.recorder.threshold, recordingThresholdTimeoutSamples)) {
       const buffer = createBuffer(recorder.recordBufferL, recorder.recordBufferR, recorder.recordBufferIndex);
 
       recorder.reset();
@@ -145,16 +148,16 @@ export default function recorder(store) {
         const state = store.getState();
         const nextLayerId = getNextLayerId(state);
 
-        store.dispatch(layerAdd(nextLayerId, buffer, state.layers.list));
         store.dispatch(recordingStop());
+        store.dispatch(layerAdd(nextLayerId, buffer, state.layers.list));
       }
 
       state = store.getState();
     }
 
-    if (!state.recorder.isCapturing && recorder.isRecording) {
+    if (state.recorder.recordingState === RECORDING_STATE.RECORDING && recorder.isRecording) {
       store.dispatch(capturingStart());
-    } else if (state.recorder.isCapturing && !recorder.isRecording) {
+    } else if (state.recorder.recordingState === RECORDING_STATE.CAPTURING && !recorder.isRecording) {
       store.dispatch(capturingStop());
     }
   };
