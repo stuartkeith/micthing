@@ -1,3 +1,4 @@
+export const APP_INIT = 'APP_INIT';
 export const BPM_SET = 'BPM_SET';
 export const CAPTURING_START = 'CAPTURING_START';
 export const CAPTURING_STOP = 'CAPTURING_STOP';
@@ -13,6 +14,7 @@ export const LAYER_SET_NOTE = 'LAYER_SET_NOTE';
 export const LAYER_SET_VOLUME = 'LAYER_SET_VOLUME';
 export const MICROPHONE_DISABLE = 'MICROPHONE_DISABLE';
 export const MICROPHONE_ENABLE = 'MICROPHONE_ENABLE';
+export const MICROPHONE_PREAPPROVED = 'MICROPHONE_PREAPPROVED';
 export const MICROPHONE_REQUEST = 'MICROPHONE_REQUEST';
 export const NOT_SUPPORTED = 'NOT_SUPPORTED';
 export const PLAYBACK_LISTENER_ADD = 'PLAYBACK_LISTENER_ADD';
@@ -27,6 +29,12 @@ export const RECORDING_THRESHOLD_SET = 'RECORDING_THRESHOLD_SET';
 export const SWING_SET = 'SWING_SET';
 export const VOLUME_SET = 'VOLUME_SET';
 export const WEBAUDIO_STATE_CHANGE = 'WEBAUDIO_STATE_CHANGE';
+
+export function appInit() {
+  return {
+    type: APP_INIT
+  };
+}
 
 export function bpmSet(value) {
   return {
@@ -134,6 +142,12 @@ export function microphoneEnable(mediaStream) {
   return {
     type: MICROPHONE_ENABLE,
     mediaStream
+  };
+}
+
+export function microphonePreapproved() {
+  return {
+    type: MICROPHONE_PREAPPROVED
   };
 }
 

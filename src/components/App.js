@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { bpmSet, layerRemoveAll, playbackStart, playbackStop, recordingStart, recordingStop, swingSet, volumeSet } from '../actions';
+import { bpmSet, layerRemoveAll, microphoneRequest, playbackStart, playbackStop, recordingStart, recordingStop, swingSet, volumeSet } from '../actions';
 import { BPM_MINIMUM, BPM_MAXIMUM, MICROPHONE_STATE, RECORDING_STATE } from '../constants';
 import { useSprings } from './hooks/useSprings';
 import { useTransition } from './hooks/useTransition';
@@ -67,26 +67,34 @@ function NotSupportedOverlay({ isSupported, supportRequirements }) {
   );
 }
 
-function MicrophoneMessage({ microphoneState }) {
+function MicrophoneMessage({ microphoneState, onMicrophoneRequest }) {
   switch (microphoneState) {
-    case MICROPHONE_STATE.DISABLED:
-      return (
-        <div className="ma5">
-          <h1 className="f2 lh-title mt0">Sorry...</h1>
-          <p className="f4 lh-copy">
-            We can't access your microphone.
-          </p>
-        </div>
-      );
+    case MICROPHONE_STATE.INIT:
     case MICROPHONE_STATE.REQUESTED_PERMISSION:
       return (
-        <div className="ma5">
-          <h1 className="f2 lh-title mt0">Hi.</h1>
-          <p className="f4 lh-copy">
-            Please allow us to use your microphone.
-          </p>
-          <p className="f5 lh-copy">(look up)</p>
-        </div>
+        <Overlay>
+          <div className="ma5">
+            <h1 className="f2 lh-title mt0">Hi.</h1>
+            <p className="f4 lh-copy">Want to make music with sounds from your microphone?</p>
+            <Button
+              onClick={onMicrophoneRequest}
+              disabled={microphoneState !== MICROPHONE_STATE.INIT}
+            >
+              Yes
+            </Button>
+          </div>
+        </Overlay>
+      );
+    case MICROPHONE_STATE.DISABLED:
+      return (
+        <Overlay className="bg-red">
+          <div className="ma5">
+            <h1 className="f2 lh-title mt0">Sorry...</h1>
+            <p className="f4 lh-copy">
+              We can't access your microphone.
+            </p>
+          </div>
+        </Overlay>
       );
     default:
       return null;
@@ -95,7 +103,7 @@ function MicrophoneMessage({ microphoneState }) {
 
 function App(props) {
   const { bpm, isCapturing, isPlaying, isRecording, isSupported, layers, microphoneState, supportRequirements, swing, volume, webAudioIsSuspended } = props;
-  const { onBpmSet, onLayerRemoveAll, onPlaybackStart, onPlaybackStop, onRecordingStart, onRecordingStop, onSwingSet, onVolumeSet } = props;
+  const { onBpmSet, onLayerRemoveAll, onMicrophoneRequest, onPlaybackStart, onPlaybackStop, onRecordingStart, onRecordingStop, onSwingSet, onVolumeSet } = props;
 
   const { controlsRef, containerRef, updateSpringProps, getLayerSprings } = useSprings({
     onLayerRemoved: (key) => {
@@ -208,7 +216,7 @@ function App(props) {
         </div>
         <LayersMatrix layers={layers} />
       </div>
-      <MicrophoneMessage microphoneState={microphoneState} />
+      <MicrophoneMessage microphoneState={microphoneState} onMicrophoneRequest={onMicrophoneRequest} />
       <NotSupportedOverlay isSupported={isSupported} supportRequirements={supportRequirements} />
     </>
   );
@@ -233,6 +241,7 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   onBpmSet: bpmSet,
   onLayerRemoveAll: layerRemoveAll,
+  onMicrophoneRequest: microphoneRequest,
   onPlaybackStart: playbackStart,
   onPlaybackStop: playbackStop,
   onRecordingStart: recordingStart,
