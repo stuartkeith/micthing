@@ -13,10 +13,10 @@ import LayersMatrix from './LayersMatrix';
 import Range from './Range';
 import VolumeMeter from './VolumeMeter';
 
-function Overlay({ children }) {
+function Overlay({ className = '', children }) {
   return (
     <div className="pa3 fixed absolute--fill bg-black-70 flex overflow-scroll">
-      <div className="bg-red flex-auto flex-grow-0 ma-auto">
+      <div className={`flex-auto flex-grow-0 ma-auto ${className}`}>
         {children}
       </div>
     </div>
@@ -29,7 +29,7 @@ function NotSupportedOverlay({ isSupported, supportRequirements }) {
   }
 
   return (
-    <Overlay>
+    <Overlay className="bg-red">
       <div className="ma5">
         <h1 className="f2 lh-title mt0">Sorry...</h1>
         <p className="f4 lh-copy mb4">
