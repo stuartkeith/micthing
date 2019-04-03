@@ -1,5 +1,6 @@
 export const BPM_MINIMUM = 40;
 export const BPM_MAXIMUM = 200;
+export const LAYER_MAXIMUM = 5;
 
 export const MICROPHONE_STATE = {
   DISABLED: 'DISABLED',

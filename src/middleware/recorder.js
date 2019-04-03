@@ -1,7 +1,7 @@
 import { audioContext } from '../webaudio';
 import { RECORDING_LISTENER_ADD, RECORDING_LISTENER_REMOVE } from '../actions';
 import { capturingStart, capturingStop, layerAdd, recordingStop } from '../actions';
-import { RECORDING_STATE } from '../constants';
+import { LAYER_MAXIMUM, RECORDING_STATE } from '../constants';
 import { getNextLayerId } from '../reducers';
 import MessageBus from '../utils/MessageBus';
 
@@ -144,7 +144,7 @@ export default function recorder(store) {
 
       recorder.reset();
 
-      if (state.layers.list.length < 5) {
+      if (state.layers.list.length < LAYER_MAXIMUM) {
         const state = store.getState();
         const nextLayerId = getNextLayerId(state);
 

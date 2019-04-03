@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { bpmSet, playbackStart, playbackStop, recordingStart, recordingStop, swingSet, volumeSet } from '../actions';
+import { bpmSet, layerRemoveAll, playbackStart, playbackStop, recordingStart, recordingStop, swingSet, volumeSet } from '../actions';
 import { BPM_MINIMUM, BPM_MAXIMUM, MICROPHONE_STATE, RECORDING_STATE } from '../constants';
+import { useSprings } from './hooks/useSprings';
+import { useTransition } from './hooks/useTransition';
 import cn from '../utils/cn';
 import Button from './Button';
 import IconCheck from './IconCheck';
@@ -93,7 +95,34 @@ function MicrophoneMessage({ microphoneState }) {
 
 function App(props) {
   const { bpm, isCapturing, isPlaying, isRecording, isSupported, layers, microphoneState, supportRequirements, swing, volume, webAudioIsSuspended } = props;
-  const { onBpmSet, onPlaybackStart, onPlaybackStop, onRecordingStart, onRecordingStop, onSwingSet, onVolumeSet } = props;
+  const { onBpmSet, onLayerRemoveAll, onPlaybackStart, onPlaybackStop, onRecordingStart, onRecordingStop, onSwingSet, onVolumeSet } = props;
+
+  const { controlsRef, containerRef, updateSpringProps, getLayerSprings } = useSprings({
+    onLayerRemoved: (key) => {
+      removeLayer(key);
+    }
+  });
+
+  const [layersWrapped, removeLayer] = useTransition(layers, {
+    getKey: (layer) => layer.id,
+    onUpdate: (child, state) => {
+      const layerSprings = getLayerSprings(child.key);
+
+      switch (state) {
+        case 'enter':
+          layerSprings.state = 'enter';
+          break;
+        case 'exit':
+          layerSprings.state = 'exit';
+          break;
+        default:
+      }
+    }
+  });
+
+  useEffect(function () {
+    updateSpringProps(layersWrapped, isCapturing);
+  }, [layersWrapped, isCapturing]);
 
   return (
     <>
@@ -111,52 +140,71 @@ function App(props) {
             Record
           </Button>
         </div>
-        {layers.length ?
-          <div className="flex mb4">
-            <Button
-              isDown={isPlaying}
-              onClick={isPlaying ? onPlaybackStop : onPlaybackStart}
+        <div ref={controlsRef} className="flex mb4">
+          <Button
+            isDown={isPlaying}
+            onClick={isPlaying ? onPlaybackStop : onPlaybackStart}
+          >
+            Play
+          </Button>
+          <span className="w1 flex-none" />
+          <Range
+            min={0}
+            max={1}
+            step={0.01}
+            value={volume}
+            onChange={onVolumeSet}
+          >
+            Volume
+          </Range>
+          <span className="w1 flex-none" />
+          <Range
+            min={BPM_MINIMUM}
+            max={BPM_MAXIMUM}
+            step={1}
+            value={bpm}
+            onChange={onBpmSet}
+          >
+            BPM: {bpm}
+          </Range>
+          <span className="w1 flex-none" />
+          <Range
+            min={0}
+            max={0.95}
+            step={0.01}
+            value={swing}
+            onChange={onSwingSet}
+          >
+            Swing: {Math.floor(swing * 100)}%
+          </Range>
+          <span className="w1 flex-none" />
+          <Button
+            onClick={onLayerRemoveAll}
+          >
+            Clear
+          </Button>
+        </div>
+        <p
+          className="ma0 h2 absolute"
+          style={{
+            opacity: isCapturing ? '1' : '0',
+            willChange: 'opacity'
+          }}
+        >
+          ...
+        </p>
+        <div ref={containerRef} className="relative">
+          {layersWrapped.map(layerWrapped => (
+            <div
+              key={layerWrapped.key}
+              ref={getLayerSprings(layerWrapped.key).ref}
+              className="absolute"
+              style={{ willChange: 'opacity, transform, visibility' }}
             >
-              Play
-            </Button>
-            <span className="w1 flex-none" />
-            <Range
-              min={0}
-              max={1}
-              step={0.01}
-              value={volume}
-              onChange={onVolumeSet}
-            >
-              Volume
-            </Range>
-            <span className="w1 flex-none" />
-            <Range
-              min={BPM_MINIMUM}
-              max={BPM_MAXIMUM}
-              step={1}
-              value={bpm}
-              onChange={onBpmSet}
-            >
-              BPM: {bpm}
-            </Range>
-            <span className="w1 flex-none" />
-            <Range
-              min={0}
-              max={0.95}
-              step={0.01}
-              value={swing}
-              onChange={onSwingSet}
-            >
-              Swing: {Math.floor(swing * 100)}%
-            </Range>
-          </div>
-          :
-          null
-        }
-        {isCapturing ? <p className="ma0 h2">...</p> : null}
-        {layers.map((layer) => (
-          <Layer key={layer.id} layer={layer} />
-        ))}
+              <Layer layer={layerWrapped.item} />
+            </div>
+          ))}
+        </div>
         <LayersMatrix layers={layers} />
       </div>
       <MicrophoneMessage microphoneState={microphoneState} />
@@ -183,6 +231,7 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   onBpmSet: bpmSet,
+  onLayerRemoveAll: layerRemoveAll,
   onPlaybackStart: playbackStart,
   onPlaybackStop: playbackStop,
   onRecordingStart: recordingStart,
