@@ -134,6 +134,7 @@ function App(props) {
         </div>
         <div className="flex mb3">
           <Button
+            disabled={microphoneState !== MICROPHONE_STATE.ENABLED}
             isDown={isRecording}
             onClick={isRecording ? onRecordingStop : onRecordingStart}
           >
