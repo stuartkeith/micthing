@@ -15,7 +15,7 @@ import VolumeMeter from './VolumeMeter';
 
 function Overlay({ className = '', children }) {
   return (
-    <div className="pa3 fixed absolute--fill bg-black-70 flex overflow-scroll">
+    <div className="pa3 fixed absolute--fill bg-black-70 flex overflow-auto">
       <div className={`flex-auto flex-grow-0 ma-auto ${className}`}>
         {children}
       </div>
